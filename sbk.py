@@ -4,7 +4,7 @@ client = discord.Client()
 
 @client.event
 async def on_message(message):
-    if message.channel.id == 421800783072460810:
+    if message.channel.id == 421494597013733406:
         if not message.attachments == []:
             await message.add_reaction('\U0001f44d')
             await message.add_reaction('\U0001f44e')
