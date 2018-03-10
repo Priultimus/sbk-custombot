@@ -220,7 +220,8 @@ class Verification:
                             code = get_random()
                             global users
                             users[message.author.id] = str(code)
-                            await message.delete()
+                            if not message.channel.permissions_for(author).value & 4 == 4:
+                                await message.delete()
                             try:
                                 await message.author.send(f"▶ | Use code `{code}` in <#{chan.id}> to authorize yourself!")
                             except discord.errors.Forbidden:
@@ -233,13 +234,16 @@ class Verification:
                             await message.author.remove_roles(role)
                             r = cfind(log)
                             await r.send(embed=logverify(message))
-                            await message.delete()
+                            if not message.channel.permissions_for(author).value & 4 == 4:
+                                await message.delete()
                             users.pop(message.author.id, None)
                             await message.author.send("✅ | You've successfully been verified!")
                         else:
-                            await message.delete()
+                            if not message.channel.permissions_for(author).value & 4 == 4:
+                                await message.delete()
                     except KeyError:
-                        await message.delete()
+                        if not message.channel.permissions_for(author).value & 4 == 4:
+                            await message.delete()
                 else:
                     pass        
             else:
