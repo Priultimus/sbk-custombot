@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import time
-
+sbk = None
 enabled = True
 verifmsg = None
 roles = "Unverified"
@@ -167,7 +167,7 @@ class Verification:
         """Verification settings."""
 
         if ctx.invoked_subcommand is None:
-            await byte.send_cmd_help(ctx)
+            await ctx.bot.send_cmd_help(ctx)
 
     @_verif.command()
     @commands.has_permissions(ban_members=True)
@@ -285,11 +285,11 @@ class Verification:
                             r = cfind(log)
                             await r.send(embed=logverify(message))
                             if not message.channel.permissions_for(message.author).value & 4 == 4 or message.author == bot.user:
-                                await message.delete())
+                                await message.delete()
                             users.pop(message.author.id, None)
                             await message.author.send("✅ | You've successfully been verified!")
                         else:
-                            if not message.channel.permissions_for(message.author).value & 4 == 4:
+                            if not message.channel.permissions_for(message.author).value & 4 == 4 or message.author == sbk.user:
                                 await message.delete()
                     except KeyError:
                         if not message.channel.permissions_for(message.author).value & 4 == 4:
