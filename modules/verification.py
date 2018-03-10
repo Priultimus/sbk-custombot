@@ -4,6 +4,7 @@ import random
 import time
 
 enabled = True
+verifmsg = None
 roles = "Unverified"
 sandbox = 257889450850254848
 channel = 'verification-testing'
@@ -160,29 +161,77 @@ class Verification:
             await ctx.send(f"❌ | An Error has occured.")
             raise e
 
-    @commands.command()
+    @commands.group(name="verif")
     @commands.has_permissions(ban_members=True)
-    async def verif(self, ctx):
+    async def _verif(self, ctx):
+        """Verification settings."""
+
+        if ctx.invoked_subcommand is None:
+            await byte.send_cmd_help(ctx)
+
+    @_verif.command()
+    @commands.has_permissions(ban_members=True)
+    async def on(self, ctx):
         global enabled
         global roles
         global channel 
         global log
 
-        if enabled == False:
-            if roles is None:
-                await ctx.send("❌ | Set the Unverified role before enabling verification!")
-            elif channel is None:
-                await ctx.send("❌ | Set the Welcome channel before enabling verification!")
-            elif log is None:
-                await ctx.send("❌ | Set the Log channel before enabling verification!")
-            else:
-                enabled = True
-                await ctx.send("✅ | Enabled verification!")
+        if roles is None:
+            await ctx.send("❌ | Set the Unverified role before enabling verification!")
+        elif channel is None:
+            await ctx.send("❌ | Set the Welcome channel before enabling verification!")
+        elif log is None:
+            await ctx.send("❌ | Set the Log channel before enabling verification!")
+        else:
+            enabled = True
+            await ctx.send("✅ | Enabled verification!")
+
+    @_verif.command()
+    @commands.has_permissions(ban_members=True)
+    async def off(self, ctx):
+        global enabled
+        global roles
+        global channel 
+        global log
+
+        if roles is None:
+            await ctx.send("❌ | Set the Unverified role before enabling verification!")
+        elif channel is None:
+            await ctx.send("❌ | Set the Welcome channel before enabling verification!")
+        elif log is None:
+            await ctx.send("❌ | Set the Log channel before enabling verification!")
         else:
             enabled = False
             await ctx.send("✅ | Disabled verification!")
 
+    
+    @_verif.command()
+    @commands.has_permissions(ban_members=True)
+    async def msg(self, ctx, msg:str):
+        global verifmsg
+        if msg.lower() == 'null' or msg.lower() == 'null.':
+            verifmsg = None
+            await ctx.send("✅ | Cleared the verification message!")
+        else:
+            verifmsg = msg
+            await ctx.send("✅ | Set the verification message!")
 
+    @_verif.command()
+    @commands.has_permissions(ban_members=True)
+    async def cleanup(self, ctx, *count):
+        global verifmsg
+        if count:
+            count = ' '.join(count)
+            count = int(count)
+            await ctx.channel.purge(limit=count)
+            if not verifmsg == None:
+                await ctx.send(verifmsg)
+        else:
+            await ctx.channel.purge()
+            if not verifmsg == None:
+                await ctx.send(verifmsg)
+    
     async def on_member_join(self, member):
         global sandbox
         if not member.guild.id == sandbox:
@@ -235,8 +284,8 @@ class Verification:
                             await message.author.remove_roles(role)
                             r = cfind(log)
                             await r.send(embed=logverify(message))
-                            if not message.channel.permissions_for(message.author).value & 4 == 4:
-                                await message.delete()
+                            if not message.channel.permissions_for(message.author).value & 4 == 4 or message.author == bot.user:
+                                await message.delete())
                             users.pop(message.author.id, None)
                             await message.author.send("✅ | You've successfully been verified!")
                         else:
