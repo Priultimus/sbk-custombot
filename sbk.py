@@ -15,6 +15,6 @@ bot = Bot(command_prefix=">")
 for file in os.listdir("modules"):
     if file.endswith(".py"):
         name = file[:-3]
-bot.load_extension(f"modules.{name}")
+bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DYSgdA.6yePajnmegaatmvhB9_9jn8-vmI')

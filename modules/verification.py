@@ -4,10 +4,10 @@ import random
 import time
 
 enabled = True
-roles = "UNVERIFIED"
-sandbox = 402197486317338625
-channel = 'signup'
-log = 'logchannel'
+roles = "Unverified"
+sandbox = 257889450850254848
+channel = 'verification-testing'
+log = 'staff-spam-bot-tests'
 users = {}
 
 def logverify(message):
@@ -83,7 +83,7 @@ class Verification:
                     return c
         r = cfind(cid)
         if r:
-            channel = cid
+            channel = str(cid)
             await ctx.send(f"✅ | Set the Welcome channel to <#{r.id}>!")
         else:
             await ctx.send(f"❌ | Couldn't find that channel.")
@@ -106,9 +106,9 @@ class Verification:
         try:
             global roles
             global log
-            role = find(roles)
+            role = find(str(roles))
             await user.add_roles(role)
-            c = cfind(log)
+            c = cfind(str(log))
             await c.send(embed=lunverify(user, ctx.message, ctx.author, reason=reason))
             await ctx.send(f"⚠ | {user.mention} has just been unverified.")
         except Exception as e:
@@ -117,7 +117,7 @@ class Verification:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def setlogchannel(self, ctx, logch:int):
+    async def setlogchannel(self, ctx, logch:str):
         global log
 
         def cfind(channel):
@@ -125,9 +125,9 @@ class Verification:
                 if c.name == channel:
                     return c
 
-        r = discord.Object(logch)
+        r = cfind(logch)
         if r:
-            log = r
+            log = logch
             await ctx.send(f"✅ | Set the Log channel to <#{r.id}>!")
         else:
             await ctx.send("❌ | Couldn't find that channel.")
@@ -149,9 +149,9 @@ class Verification:
             global roles
             global users
             global log
-            role = find(roles)
+            role = find(str(roles))
             await user.remove_roles(role)
-            c = cfind(log)
+            c = cfind(str(log))
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             await user.send("✅ | You've successfully been verified!")
             users.pop(user.id, None)
@@ -199,7 +199,7 @@ class Verification:
     async def on_message(self, message):
         global sandbox
         if message.guild.id == sandbox:
-            global channel 
+            global channel
 
             def find(rolename):
                 for role in message.guild.roles:
