@@ -326,6 +326,7 @@ class Verification:
                                 r = cfind(log)
                                 rr = cfind(chan)
                                 await rr.purge(limit=100)
+                                global verifmsg
                                 if not verifmsg == None:
                                     await rr.send(verifmsg)
                                 await r.send(embed=logverify(message))
