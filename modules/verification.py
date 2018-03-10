@@ -167,15 +167,20 @@ class Verification:
             c = cfind(str(log))
             rr = cfind(str(channel))
             def is_me(m):
-                return m.author == ctx.message.author or message.author.bot
+                return (m.author == ctx.message.author or m.author.bot) and ("Verification!" not in m.content)
 
             await rr.purge(limit=100, check=is_me)
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
-                await user.send("✅ | You've successfully been verified!")
+                a = await user.send("✅ | You've successfully been verified!")
+                time.sleep(10)
+                if a.channel.name == channel:
+                    await a.delete()
+                else:
+                    pass
             except:
                 pass
-            users.pop(user.id, None)
+            users[ctx.author.id] = None
             a = await ctx.send(f"✅ | {user.mention} has just been verified.")
             time.sleep(10)
             if ctx.channel.name == channel:
@@ -322,7 +327,6 @@ class Verification:
         try:
             if message.guild.id == sandbox:
                 global channel
-
                 def find(rolename):
                     for role in message.guild.roles:
                         if role.name == rolename:
@@ -334,18 +338,25 @@ class Verification:
                             return c
 
                 chan = cfind(channel)
-
+                
                 if message.channel == chan:
                     global enabled
+                    global users
                     global sbk
-                    if enabled == True:
-                        try:
-                            if message.content == '>getcode':
-                                code = get_random()
-                                global users
+                    try:
+                        users[message.author.id]
+                    except KeyError:
+                        users[message.author.id] = None
+                    print(users[message.author.id])
+                    print(message.content)
+                    if enabled == True: 
+                        if message.content == '>getcode':
+                            code = get_random()
+                            try:
                                 if users[message.author.id] == 'N':
                                     mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member in <#422049235425427457> to be verified again."""
                                     await message.channel.send(mmm)
+                                
                                 else:
                                     users[message.author.id] = str(code)
                                     try:
@@ -354,43 +365,33 @@ class Verification:
                                         e = await message.channel.send(f"❌ | {message.author.mention}, I cannot DM you!")
                                         time.sleep(10)
                                         await e.delete()
+                            except KeyError:
+                                pass
+                        elif str(message.content) == str(users[message.author.id]):
+                            global roles
+                            role = find(roles)
+                            await message.author.remove_roles(role)
+                            r = cfind(log)
+                            rr = cfind(channel)
+                            
+                            def is_me(m):
+                                return (m.author == message.author or message.author.bot) and ("Verification!" not in m.content)
 
-                                if not message.channel.permissions_for(message.author).value & 4 == 4:
-                                    if message.author.bot:
-                                        pass
-                                    else:
-                                        await message.delete()
-                            elif message.content == users[message.author.id]:
-                                global roles
-                                role = find(roles)
-                                await message.author.remove_roles(role)
-                                r = cfind(log)
-                                rr = cfind(chan)
-                                def is_me(m):
-                                    return m.author == message.author
-
-                                await rr.purge(limit=100, check=is_me)
-                                await r.send(embed=logverify(message))
-                                if not message.channel.permissions_for(message.author).value & 4 == 4:
-                                    if message.author.bot:
-                                        pass
-                                    else:
-                                        await message.delete()
-                                users.pop(message.author.id, None)
-                                await message.author.send("✅ | You've successfully been verified!")
-                            else:
-                                if not message.channel.permissions_for(message.author).value & 4 == 4:
-                                    if message.author.bot:
-                                        pass
-                                    else:
-                                        await message.delete()
-                        except KeyError:
+                            await rr.purge(limit=100, check=is_me)
+                            await r.send(embed=logverify(message))
                             if not message.channel.permissions_for(message.author).value & 4 == 4:
                                 if message.author.bot:
                                     pass
                                 else:
                                     await message.delete()
-                                
+                            users[message.author.id] = None
+                            await message.author.send("✅ | You've successfully been verified!")
+                        else:
+                            if not message.channel.permissions_for(message.author).value & 4 == 4:
+                                if message.author.bot:
+                                    pass
+                                else:
+                                    await message.delete()          
                     else:
                         pass        
                 else:
