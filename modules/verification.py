@@ -157,11 +157,17 @@ class Verification:
                     return c
         try:
             global roles
+            global channel
             global users
             global log
+            global verifmsg
             role = find(str(roles))
             await user.remove_roles(role)
             c = cfind(str(log))
+            rr = cfind(str(channel))
+            await rr.purge(limit=100)
+            if not verifmsg == None:
+                await rr.send(verifmsg)
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
                 await user.send("✅ | You've successfully been verified!")
@@ -318,6 +324,10 @@ class Verification:
                                 role = find(roles)
                                 await message.author.remove_roles(role)
                                 r = cfind(log)
+                                rr = cfind(chan)
+                                await rr.purge(limit=100)
+                                if not verifmsg == None:
+                                    await rr.send(verifmsg)
                                 await r.send(embed=logverify(message))
                                 if not message.channel.permissions_for(message.author).value & 4 == 4:
                                     if message.author.bot:
