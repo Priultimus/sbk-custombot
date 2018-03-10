@@ -1,23 +1,20 @@
 import discord
+import os
+import sys
+from discord.ext.commands import AutoShardedBot
 
-client = discord.Client()
+class Bot(AutoShardedBot):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-@client.event
-async def on_message(message):
-    if message.channel.id == 421494597013733406:
-        if not message.attachments == []:
-            await message.add_reaction('\U0001f44d')
-            await message.add_reaction('\U0001f44e')
-        elif not message.embeds == []:
-            await message.add_reaction('\U0001f44d')
-            await message.add_reaction('\U0001f44e')   
-        else:
-            pass
-    else:
-        pass
+    async def on_ready(self):
+        print("Ready!")
 
-@client.event
-async def on_ready():
-    print("Ready!")
+bot = Bot(command_prefix=">")
 
-client.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DYSgdA.6yePajnmegaatmvhB9_9jn8-vmI')
+for file in os.listdir("modules"):
+    if file.endswith(".py"):
+        name = file[:-3]
+bot.load_extension(f"modules.{name}")
+bot.load_extension("modules.artchannel")
+bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DYSgdA.6yePajnmegaatmvhB9_9jn8-vmI')
