@@ -117,14 +117,15 @@ class Verification:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def setlogchannel(self, ctx, logch):
+    async def setlogchannel(self, ctx, logch:int):
         global log
+
         def cfind(channel):
             for c in ctx.guild.channels:
                 if c.name == channel:
                     return c
 
-        r = cfind(logch)
+        r = discord.Object(logch)
         if r:
             log = r
             await ctx.send(f"✅ | Set the Log channel to <#{r.id}>!")
