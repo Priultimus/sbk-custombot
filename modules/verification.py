@@ -9,7 +9,8 @@ verifmsg = """**__Verification!__**
 **~** In order to get verified you must do some things!
  1. Read <#404992099478405122>, because as soon as you're verified you swear under penalty of perjury that you read and agree to these rules.
  2. Do `>getcode` in order to have <@!421799105854177290> send you a DM! You must have DMs on. If you don't know how to don't worry.
- 3. Enter the code Sinbot sent you here! And Sinbot'll verify you."""
+ 3. Enter the code Sinbot sent you here! And Sinbot'll verify you.
+ 4. If you were manually unverified (a staff did `>unverify` to you), you must reread <#404992099478405122> and then ping an online staff member to verify you."""
 roles = "Unverified"
 sandbox = 257889450850254848
 channel = 'verification-testing'
@@ -165,16 +166,20 @@ class Verification:
             await user.remove_roles(role)
             c = cfind(str(log))
             rr = cfind(str(channel))
-            await rr.purge(limit=100)
-            if not verifmsg == None:
-                await rr.send(verifmsg)
+            def is_me(m):
+                return m.author == ctx.message.author or message.author.bot
+
+            await rr.purge(limit=100, check=is_me)
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
                 await user.send("✅ | You've successfully been verified!")
             except:
                 pass
             users.pop(user.id, None)
-            await ctx.send(f"✅ | {user.mention} has just been verified.")
+            a = await ctx.send(f"✅ | {user.mention} has just been verified.")
+            time.sleep(10)
+            if ctx.channel.name == channel:
+                await a.delete()
         except Exception as e:
             await ctx.send(f"❌ | An Error has occured.")
             raise e
@@ -255,13 +260,33 @@ class Verification:
             if count:
                 count = ' '.join(count)
                 count = int(count)
-                await ctx.channel.purge(limit=count)
-                if not verifmsg == None:
-                    await ctx.send(verifmsg)
+                def eck(s):
+                    if "Verification!" not in s.content:
+                        return True
+                    else:
+                        return False
+
+                await ctx.channel.purge(limit=count, check=eck)
+
             else:
-                await ctx.channel.purge(limit=100)
-                if not verifmsg == None:
-                    await ctx.send(verifmsg)
+                def eck(s):
+                    if "Verification!" not in s.content:
+                        return True
+                    else:
+                        return False
+                await ctx.channel.purge(limit=100, check=eck)
+
+    @_verif.command()
+    @commands.has_permissions(ban_members=True)
+    async def send(self, ctx):
+        global verifmsg
+        global channel
+        a = await discord.utils.get(ctx.guild.channels, name=channel).send(verifmsg)
+        await a.pin()
+        def check(s):
+            return "Verification!" not in s.content
+
+        await a.channel.purge(limit=100, check=check)
     
     async def on_member_join(self, member):
         global sandbox
@@ -275,6 +300,22 @@ class Verification:
 
             r = find(roles)
             await member.add_roles(r)
+
+        
+
+    async def on_message_delete(self, message):
+        if "Verification!" in message.content:
+            global channel
+            global verifmsg
+            if message.channel == discord.utils.get(message.guild.channels, name=channel):
+                b = discord.utils.get(message.guild.channels, name=channel)
+                await b.purge(limit=100)
+                a = await message.channel.send(verifmsg)
+                await a.pin()
+                def check(s):
+                    return "Verification!" not in s.content
+
+                await message.channel.purge(limit=100, check=check)
 
     async def on_message(self, message):
         global sandbox
@@ -325,10 +366,10 @@ class Verification:
                                 await message.author.remove_roles(role)
                                 r = cfind(log)
                                 rr = cfind(chan)
-                                await rr.purge(limit=100)
-                                global verifmsg
-                                if not verifmsg == None:
-                                    await rr.send(verifmsg)
+                                def is_me(m):
+                                    return m.author == message.author
+
+                                await rr.purge(limit=100, check=is_me)
                                 await r.send(embed=logverify(message))
                                 if not message.channel.permissions_for(message.author).value & 4 == 4:
                                     if message.author.bot:
