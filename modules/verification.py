@@ -173,9 +173,7 @@ class Verification:
             await ctx.message.delete()
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
-                a = await user.send("✅ | You've successfully been verified!")
-                else:
-                    pass
+               await user.send("✅ | You've successfully been verified!")               
             except:
                 pass
             users[user.id] = None
@@ -382,8 +380,12 @@ class Verification:
                                     if users[message.author.id] == 'N':
                                         pass
                                     else:
-                                        await message.delete()
+                                        try:
+                                            await message.delete()
+                                        except:
+                                            pass
                             users[message.author.id] = None
+                            print("Nin.")
                             await message.author.send("✅ | You've successfully been verified!")
                         else:
                             if not message.channel.permissions_for(message.author).value & 4 == 4:
