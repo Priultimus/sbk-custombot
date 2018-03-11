@@ -167,9 +167,10 @@ class Verification:
             c = cfind(str(log))
             rr = cfind(str(channel))
             def is_me(m):
-                return (m.author == ctx.message.author or m.author.bot) and ("Verification!" not in m.content)
+                return (m.author == user or m.author.bot) and ("Verification!" not in m.content)
 
             await rr.purge(limit=100, check=is_me)
+            await ctx.message.delete()
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
                 a = await user.send("✅ | You've successfully been verified!")
@@ -181,10 +182,7 @@ class Verification:
             except:
                 pass
             users[ctx.author.id] = None
-            a = await ctx.send(f"✅ | {user.mention} has just been verified.")
-            time.sleep(10)
-            if ctx.channel.name == channel:
-                await a.delete()
+            await ctx.message.delete()
         except Exception as e:
             await ctx.send(f"❌ | An Error has occured.")
             raise e
@@ -383,7 +381,10 @@ class Verification:
                                 if message.author.bot:
                                     pass
                                 else:
-                                    await message.delete()
+                                    if users[message.author.id] == 'N':
+                                        pass
+                                    else:
+                                        await message.delete()
                             users[message.author.id] = None
                             await message.author.send("✅ | You've successfully been verified!")
                         else:
@@ -391,7 +392,10 @@ class Verification:
                                 if message.author.bot:
                                     pass
                                 else:
-                                    await message.delete()          
+                                    if users[message.author.id] == 'N':
+                                        pass
+                                    else:
+                                        await message.delete()          
                     else:
                         pass        
                 else:
