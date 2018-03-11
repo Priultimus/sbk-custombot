@@ -11,25 +11,15 @@ class ArtChannel:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def setartchannel(self, ctx, logch:str):
+    async def setartchannel(self, ctx, logch:int):
         global channel
 
-        def cfind(channel):
-            for c in ctx.guild.channels:
-                if c.name == channel:
-                    return c
-
-        r = cfind(logch)
-        if r:
-            log = logch
-            await ctx.send(f"✅ | Set the Art channel to <#{r.id}>!")
-        else:
-            await ctx.send("❌ | Couldn't find that channel.")
-
+        channel = logch
+        await ctx.send(f"✅ | Set the Art channel to <#{id}>!")
         
     async def on_message(self, message):
 
-        if message.channel.id == 281738644958609408:
+        if message.channel.id == channel:
             if not message.attachments == []:
                 await message.add_reaction('\U0001f44d')
                 await message.add_reaction('\U0001f44e')

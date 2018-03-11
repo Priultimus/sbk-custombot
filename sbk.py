@@ -9,6 +9,7 @@ class Bot(AutoShardedBot):
 
     async def on_ready(self):
         print("Ready!")
+    async def on_command_error()
 
 bot = Bot(command_prefix=">")
 
