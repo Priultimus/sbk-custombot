@@ -2,9 +2,9 @@ import discord
 import os
 import traceback
 import sys
-from discord.ext.commands import AutoShardedBot
+from discord.ext import commands
 
-class Bot(AutoShardedBot):
+class Bot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
