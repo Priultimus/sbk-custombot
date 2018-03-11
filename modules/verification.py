@@ -183,6 +183,8 @@ class Verification:
                 pass
             users[ctx.author.id] = None
             await ctx.message.delete()
+        except discord.errors.NotFound:
+            pass
         except Exception as e:
             await ctx.send(f"❌ | An Error has occured.")
             raise e
