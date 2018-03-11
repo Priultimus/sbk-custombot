@@ -174,16 +174,14 @@ class Verification:
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
                 a = await user.send("✅ | You've successfully been verified!")
-                time.sleep(10)
-                if a.channel.name == channel:
-                    await a.delete()
                 else:
                     pass
             except:
                 pass
-            users[ctx.author.id] = None
+            users[user.id] = None
             await ctx.message.delete()
         except discord.errors.NotFound:
+            users[user.id] = None
             pass
         except Exception as e:
             await ctx.send(f"❌ | An Error has occured.")
