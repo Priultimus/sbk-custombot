@@ -345,8 +345,6 @@ class Verification:
                         users[message.author.id]
                     except KeyError:
                         users[message.author.id] = None
-                    print(users[message.author.id])
-                    print(message.content)
                     if enabled == True: 
                         if message.content == '>getcode':
                             code = get_random()
