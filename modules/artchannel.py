@@ -19,7 +19,7 @@ class ArtChannel:
         
     async def on_message(self, message):
 
-        if message.channel.id == channel:
+        if message.channel.id == 421494597013733406:
             if not message.attachments == []:
                 await message.add_reaction('\U0001f44d')
                 await message.add_reaction('\U0001f44e')
