@@ -4,12 +4,30 @@ import traceback
 import sys
 from discord.ext import commands
 
+if sys.argv == ['sbk.py', '-test']:
+    set = None
+else:
+    set = True
+
 class Bot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
+        await self.is_owner(self.user)
         print("Ready!")
+    async def on_message(self, message):
+        global set
+        if set:
+            if message.guild.id == 257889450850254848:
+                await self.process_commands(message)
+            else:
+                pass
+        else:
+            if message.guild.id == 402197486317338625:
+                await self.process_commands(message)
+            else:
+                pass
     async def on_command_error(self, ctx, error):
 
         """The event triggered when an error is raised while invoking a command.
@@ -19,13 +37,13 @@ class Bot(commands.AutoShardedBot):
         # This prevents any commands with local handlers being handled here in on_command_error.
         if hasattr(ctx.command, 'on_error'):
             return
-        
+
         ignored = (commands.CommandNotFound, commands.UserInputError)
-        
+
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.
         # If nothing is found. We keep the exception passed to on_command_error.
         error = getattr(error, 'original', error)
-        
+
         # Anything in ignored will return and prevent anything happening.
         if isinstance(error, ignored):
             return
@@ -48,11 +66,15 @@ class Bot(commands.AutoShardedBot):
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
-bot = Bot(command_prefix=">")
+if not set:
+    bot = Bot(command_prefix=">>")
+else:
+    bot = Bot(command_prefix=">")
 
-for file in os.listdir("modules"):
-    if file.endswith(".py"):
-        name = file[:-3]
+bot.load_extension(f"modules.developer")
+bot.load_extension(f"modules.challenges")
 bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
-bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DYSgdA.6yePajnmegaatmvhB9_9jn8-vmI')
+if not set:
+    print("--- Testing mode active! ----")
+bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DYnBng.heZo6jiy5iY7HvydZ7ntbzFOZHc')

@@ -2,19 +2,27 @@ import discord
 from discord.ext import commands
 import random
 import time
-
+from __main__ import set
 sbk = None
-enabled = True
-verifmsg = """**__Verification!__**
+if set:
+    enabled = True
+    verifmsg = """**__Verification!__**
 **~** In order to get verified you must do some things!
  1. Read <#404992099478405122>, because as soon as you're verified you swear under penalty of perjury that you read and agree to these rules.
  2. Do `>getcode` in order to have <@!421799105854177290> send you a DM! You must have DMs on. If you don't know how to don't worry.
  3. Enter the code Sinbot sent you here! And Sinbot'll verify you.
  4. If you were manually unverified (a staff did `>unverify` to you), you must reread <#404992099478405122> and then ping an online staff member to verify you."""
-roles = "Unverified"
-sandbox = 257889450850254848
-channel = 'verification-testing'
-log = 'staff-spam-bot-tests'
+    roles = "Unverified"
+    sandbox = 257889450850254848
+    channel = 'verification-testing'
+    log = 'staff-spam-bot-tests'
+else:
+    enabled = False
+    verifmsg = "Testing mode is enabled."
+    roles = 'UNVERIFED'
+    channel = 'signup'
+    log = 'logchannel'
+    sandbox = 402197486317338625
 users = {}
 
 def logverify(message):
@@ -102,11 +110,11 @@ class Verification:
         reason = ' '.join(reason)
 
         def find(rolename):
-            
+
             for role in ctx.guild.roles:
                 if role.name == rolename:
                     return role
-        
+
         def cfind(channel):
             for c in ctx.guild.channels:
                 if c.name == channel:
@@ -142,7 +150,7 @@ class Verification:
             await ctx.send(f"✅ | Set the Log channel to <#{r.id}>!")
         else:
             await ctx.send("❌ | Couldn't find that channel.")
-            
+
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def verify(self, ctx, user:discord.Member, *reason):
@@ -151,7 +159,7 @@ class Verification:
             for role in ctx.guild.roles:
                 if role.name == rolename:
                     return role
-        
+
         def cfind(channel):
             for c in ctx.guild.channels:
                 if c.name == channel:
@@ -173,7 +181,7 @@ class Verification:
             await ctx.message.delete()
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
-               await user.send("✅ | You've successfully been verified!")               
+               await user.send("✅ | You've successfully been verified!")
             except:
                 pass
             users[user.id] = None
@@ -198,7 +206,7 @@ class Verification:
     async def on(self, ctx):
         global enabled
         global roles
-        global channel 
+        global channel
         global log
 
         if roles is None:
@@ -216,7 +224,7 @@ class Verification:
     async def off(self, ctx):
         global enabled
         global roles
-        global channel 
+        global channel
         global log
 
         if roles is None:
@@ -229,7 +237,7 @@ class Verification:
             enabled = False
             await ctx.send("✅ | Disabled verification!")
 
-    
+
     @_verif.command()
     @commands.has_permissions(ban_members=True)
     async def msg(self, ctx, *msg):
@@ -288,7 +296,7 @@ class Verification:
             return "Verification!" not in s.content
 
         await a.channel.purge(limit=100, check=check)
-    
+
     async def on_member_join(self, member):
         global sandbox
         if not member.guild.id == sandbox:
@@ -302,7 +310,7 @@ class Verification:
             r = find(roles)
             await member.add_roles(r)
 
-        
+
 
     async def on_message_delete(self, message):
         if "Verification!" in message.content:
@@ -334,7 +342,7 @@ class Verification:
                             return c
 
                 chan = cfind(channel)
-                
+
                 if message.channel == chan:
                     global enabled
                     global users
@@ -343,14 +351,14 @@ class Verification:
                         users[message.author.id]
                     except KeyError:
                         users[message.author.id] = None
-                    if enabled == True: 
+                    if enabled == True:
                         if message.content == '>getcode':
                             code = get_random()
                             try:
                                 if users[message.author.id] == 'N':
                                     mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member in <#422049235425427457> to be verified again."""
                                     await message.channel.send(mmm)
-                                
+
                                 else:
                                     users[message.author.id] = str(code)
                                     try:
@@ -367,7 +375,7 @@ class Verification:
                             await message.author.remove_roles(role)
                             r = cfind(log)
                             rr = cfind(channel)
-                            
+
                             def is_me(m):
                                 return (m.author == message.author or message.author.bot) and ("Verification!" not in m.content)
 
@@ -395,14 +403,14 @@ class Verification:
                                     if users[message.author.id] == 'N':
                                         pass
                                     else:
-                                        await message.delete()          
+                                        await message.delete()
                     else:
-                        pass        
+                        pass
                 else:
                     pass
         except AttributeError:
             pass
-            
+
 
 
 def setup(bot):

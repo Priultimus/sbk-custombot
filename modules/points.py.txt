@@ -14,11 +14,11 @@ def updatejoin(join):
     with open("data.json", "r") as jsonFile:
         data = json.load(jsonFile)
 
-    
-    tmp = data[] 
+
+    tmp = data[]
     data["joining"] = join
 
-    
+
     with open("config.json", "w") as jsonFile:
         json.dump(data, jsonFile)
 class Points:

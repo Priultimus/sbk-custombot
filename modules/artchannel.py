@@ -1,7 +1,10 @@
 import discord
-from discord.ext import commands 
-
-channel = 'art'
+from discord.ext import commands
+from __main__ import set
+if set:
+    channel = 'art'
+else:
+    channel = 'custombot-testing'
 
 class ArtChannel:
     """The art channel on_message."""
@@ -16,7 +19,7 @@ class ArtChannel:
 
         channel = logch
         await ctx.send(f"✅ | Set the Art channel to <#{id}>!")
-        
+
     async def on_message(self, message):
 
         if message.channel.id == 421494597013733406:
@@ -25,7 +28,7 @@ class ArtChannel:
                 await message.add_reaction('\U0001f44e')
             elif not message.embeds == []:
                 await message.add_reaction('\U0001f44d')
-                await message.add_reaction('\U0001f44e')   
+                await message.add_reaction('\U0001f44e')
             else:
                 pass
         else:
