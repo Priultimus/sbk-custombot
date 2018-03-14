@@ -72,9 +72,11 @@ else:
     bot = Bot(command_prefix=">")
 
 bot.load_extension(f"modules.developer")
-bot.load_extension(f"modules.challenges")
+if not set:
+    bot.load_extension(f"modules.challenges")
 bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
+bot.load_extension(f"modules.mod")
 if not set:
     print("--- Testing mode active! ----")
 bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DYnBng.heZo6jiy5iY7HvydZ7ntbzFOZHc')
