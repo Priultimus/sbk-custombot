@@ -53,6 +53,7 @@ class Roles:
                     await ctx.send("❌ | An error has occured.")
         else:
             if read()[str(member.id)] != None:
+                blcaklist = read()
                 await ctx.send(f"⚠ | This user is Artist role blacklisted! Reason: {blacklist[member.id][1]}")
             else:
                 await ctx.send(f"⚠ | This user is Artist role blacklisted!")
