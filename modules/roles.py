@@ -167,7 +167,7 @@ class Roles:
                 try:
                     if roles:
                         if ctx.author.roles[role_count] > roles:
-                            await member.add_roles(roles, reason=f"[Command done by {ctx.author.name}#{ctx.author.discrimintao}")
+                            await member.add_roles(roles, reason=f"[Command done by {ctx.author.name}#{ctx.author.discriminator}")
                             await ctx.send(f"✅ | Successfully added role `{roles.name}` to {member.mention}!")
                         else:
                             await ctx.send("❌ | That role is higher than your highest role!")
