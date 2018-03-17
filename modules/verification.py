@@ -364,7 +364,7 @@ class Verification:
                             code = get_random()
                             try:
                                 if users[message.author.id] == 'N':
-                                    mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member in <#422049235425427457> to be verified again."""
+                                    mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member to be verified again."""
                                     await message.channel.send(mmm)
 
                                 else:
