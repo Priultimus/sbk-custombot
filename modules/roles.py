@@ -54,7 +54,7 @@ class Roles:
         else:
             if read()[str(member.id)] != None:
                 blacklist = read()
-                await ctx.send(f"⚠ | This user is Artist role blacklisted! Reason: {blacklist[member.id][1]}")
+                await ctx.send(f"⚠ | This user is Artist role blacklisted! Reason: {blacklist[str(member.id)][1]}")
             else:
                 await ctx.send(f"⚠ | This user is Artist role blacklisted!")
 
