@@ -299,21 +299,24 @@ class Verification:
 
     async def on_member_join(self, member):
         global sandbox
-        if not member.guild.id == sandbox:
-            pass
-        else:
-            await member.send("Hello!")
-            await member.send("You're in SbK or Sinbad \⚔ Knights!")
-            await member.send("You should do `>getcode` in the channel welcome. <#424594608564076544> <-- clickable.")
-            await member.send("Then I'll send you some numbers and you can type those in the welcome place!")
-            await member.send(":D")
-            def find(rolename):
-                for role in member.guild.roles:
-                    if role.name == rolename:
-                        return role
+        try:
+            if not member.guild.id == sandbox:
+                pass
+            else:
+                await member.send("Hello!")
+                await member.send("You're in SbK or Sinbad \⚔ Knights!")
+                await member.send("You should do `>getcode` in the channel welcome. <#424594608564076544> <-- clickable.")
+                await member.send("Then I'll send you some numbers and you can type those in the welcome place!")
+                await member.send(":D")
+                def find(rolename):
+                    for role in member.guild.roles:
+                        if role.name == rolename:
+                            return role
 
-            r = find(roles)
-            await member.add_roles(r)
+                r = find(roles)
+                await member.add_roles(r)
+        except AttributeError:
+            pass
 
 
 
