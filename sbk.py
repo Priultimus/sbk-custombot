@@ -25,17 +25,17 @@ class Bot(commands.AutoShardedBot):
             try:
                 if message.guild.id == 257889450850254848:
                     await self.process_commands(message)
-                except AttributeError:
+                else:
                     pass
-            else:
+            except AttributeError:
                 pass
         else:
             try:
                 if message.guild.id == 402197486317338625:
                     await self.process_commands(message)
+                else:
+                    pass
             except AttributeError:
-                pass
-            else:
                 pass
     async def on_command_error(self, ctx, error):
 
