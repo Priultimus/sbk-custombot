@@ -176,7 +176,8 @@ class Roles:
                 except discord.errors.Forbidden:
                     await ctx.send("❌ | I couldn't add that role because I am either too far below it or I do not have the permissions required to add it.")
                 except Exception as e:
-                    await ctx.send("❌ | An error in removing that role has occured, please contact <@!286246724270555136>.")
+                    await ctx.send("❌ | An error in adding that role has occured, please contact <@!286246724270555136>.")
+                    raise e
         else:
             await ctx.send("❌ | You lack the required permissions to execute this command.")
 
@@ -203,6 +204,7 @@ class Roles:
                     await ctx.send("❌ | I couldn't remove that role because I am either too far below it or I do not have the permissions required to remove it.")
                 except Exception as e:
                     await ctx.send("❌ | An error in adding that role has occured, please contact <@!286246724270555136>.")
+                    raise e
         else:
             await ctx.send("❌ | You lack the required permissions to execute this command.")
 
