@@ -14,8 +14,8 @@ if set:
  4. If you were manually unverified (a staff did `>unverify` to you), you must reread <#404992099478405122> and then ping an online staff member to verify you."""
     roles = "Unverified"
     sandbox = 257889450850254848
-    channel = 'verification-testing'
-    log = 'staff-spam-bot-tests'
+    channel = 'welcome'
+    log = 'staff-logs'
 else:
     enabled = False
     verifmsg = "Testing mode is enabled."
