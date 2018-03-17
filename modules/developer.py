@@ -217,6 +217,11 @@ class Developer:
         restart_program()
 
 
+async def on_message(message):
+    if 'nerd' in message.content.lower():
+        if message.author.id == 260024920757633025:
+            await ctx.send("https://b1nzy.ratelimited.me/sm86b4.png")
+
 def setup(bot):
     bot.add_cog(Developer(bot))
     print("Loaded Developer.")
