@@ -3,6 +3,9 @@ import os
 import traceback
 import sys
 from discord.ext import commands
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 if sys.argv == ['sbk.py', '-test']:
     set = None
@@ -14,7 +17,6 @@ class Bot(commands.AutoShardedBot):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
-        await self.is_owner(self.user)
         print("Ready!")
     async def on_message(self, message):
         global set
@@ -72,8 +74,7 @@ else:
     bot = Bot(command_prefix=">")
 
 bot.load_extension(f"modules.developer")
-if not set:
-    bot.load_extension(f"modules.roles")
+bot.load_extension(f"modules.roles")
 bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 
