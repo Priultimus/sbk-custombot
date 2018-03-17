@@ -4,6 +4,7 @@ import textwrap
 import traceback
 import git
 import asyncio
+import sys
 import inspect
 import textwrap
 from contextlib import redirect_stdout
