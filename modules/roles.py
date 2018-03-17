@@ -1,6 +1,20 @@
 import discord
 from discord.ext import commands
 import json
+import emoji
+import re
+
+
+def lunverify(member, message, mod, reason=None):
+    embed = discord.Embed(colour=0xDD2E44, timestamp=message.created_at)
+    embed.set_author(name="User Art blacklisted!", icon_url="https://i.imgur.com/0owUvc3.png")
+    embed.set_footer(text=f"ID:{member.id}")
+    embed.set_thumbnail(url=member.avatar_url)
+    embed.add_field(name="Member:", value=f"{member.name}#{member.discriminator}\n", inline=False)
+    embed.add_field(name="Staff Member:", value=f"{mod.name}#{mod.discriminator}\n", inline=False)
+    if reason:
+        embed.add_field(name="Reason:", value=reason, inline=False)
+    return embed
 
 def update(a, b):
     with open("config.json", "r") as jsonFile:
@@ -39,7 +53,7 @@ class Roles:
                     await ctx.send("❌ | An error has occured.")
         else:
             if read()[str(member.id)] != None:
-                await ctx.send(f"⚠ | This user is Artist role blacklisted! Reason: {blacklist[member.id]}")
+                await ctx.send(f"⚠ | This user is Artist role blacklisted! Reason: {blacklist[member.id][1]}")
             else:
                 await ctx.send(f"⚠ | This user is Artist role blacklisted!")
 
@@ -65,10 +79,12 @@ class Roles:
 
     @_artblacklist.command(aliases=['add'])
     @commands.has_any_role('Staff')
-    async def addblacklist(self, ctx,member:discord.Member, reason=None):
+    async def addblacklist(self, ctx,member:discord.Member, *reason):
+        if reason:
+            reason = ' '.join(reason)
         if not str(member.id) in read():
             if reason:
-                update(member.id, reason)
+                update(member.id,[len(read())+1, reason])
                 role = discord.utils.get(ctx.guild.roles, name='Artist')
                 check = discord.utils.get(member.roles, name='Artist')
                 if check:
@@ -79,7 +95,7 @@ class Roles:
                 check = discord.utils.get(member.roles, name='Artist')
                 if check:
                     await member.remove_roles(role, reason=f"[Blacklisted user {member.name}#{member.discriminator}]")
-                update(member.id, None)
+                update(member.id, [len(read())+1, None])
                 await ctx.send(f"✅ | Successfully blacklisted {member.name}#{member.discriminator}.")
         else:
             await ctx.send("❌ | That user is already blacklisted!")
@@ -95,22 +111,54 @@ class Roles:
 
     @_artblacklist.command(aliases=['list'])
     @commands.has_any_role("Staff")
-    async def _blacklist(self, ctx):
+    async def _blacklist(self, ctx, number=10):
         a = ""
+        embed = discord.Embed(color=ctx.author.color)
+        i = 0
         for b in read():
-            reason = read()[str(b)]
+            greater = False
+            i+=1
+            if number:
+                if number > 10:
+                    if i > 10:
+                        greater = True
+                    else:
+                        greater = True
+                else:
+                    if i > number:
+                        break
+            else:
+                if i > 10:
+                    greater = True
+
+            reason = read()[str(b)][1]
+            pos = read()[str(b)][0]
+
             member = discord.utils.get(ctx.bot.get_all_members(), id=int(b))
-            a = a+f"**ID:** {member.id} - **Name:** {member.mention} {member.name}#{member.discriminator} - **Reason:** {reason}\n"
+            embed.set_author(name="Art channel blacklists:\n")
+            clean_name = emoji.get_emoji_regexp().sub(r'\\\1', member.name)
+            #embed.add_field(name="", value=f"**ID:** {member.id}\n**Name:**{member.name}#{member.discriminator}\n", inline=False)
+
+            embed.add_field(
+            name=f"#{pos} {clean_name}#{member.discriminator} (ID:{member.id})",
+            value=reason,
+            inline=False)
+
         try:
-            await ctx.send(a)
+            if len(read()) == 0:
+                await ctx.send("❌ | Nobody is blacklisted!")
+            else:
+
+                await ctx.send(embed=embed)
+
         except discord.errors.HTTPException:
-            await ctx.send("Nobody is blacklisted!")
+            await ctx.send("❌ | Nobody is blacklisted!")
 
     @commands.command(aliases=['addrole'])
     async def add(self, ctx, member:discord.Member, *roles):
         if (discord.utils.get(ctx.author.roles, name='Staff') != None or discord.utils.get(ctx.author.roles, name='Challenge Approver') !=None) or ctx.author.guild_permissions.value & 268435456  == 268435456 != True:
             if not roles:
-                await ctx.send("You need to provide a role!")
+                await ctx.send("❌ | You need to provide a role!")
             else:
                 roles = ' '.join(roles)
                 roles = discord.utils.get(ctx.guild.roles, name=roles)

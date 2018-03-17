@@ -46,7 +46,7 @@ def mlogverify(member, message, mod, reason=None):
 
 def lunverify(member, message, mod, reason=None):
     embed = discord.Embed(colour=0xDD2E44, timestamp=message.created_at)
-    embed.set_author(name="User Unverified Successfully!", icon_url="https://i.imgur.com/0owUvc3.png")
+    embed.set_author(name="User Unverified!", icon_url="https://i.imgur.com/0owUvc3.png")
     embed.set_footer(text=f"ID:{member.id}")
     embed.set_thumbnail(url=member.avatar_url)
     embed.add_field(name="Member:", value=f"{member.name}#{member.discriminator}\n", inline=False)
@@ -302,6 +302,11 @@ class Verification:
         if not member.guild.id == sandbox:
             pass
         else:
+            await member.send("Hello!")
+            await member.send("You're in SbK or Sinbad \⚔ Knights!")
+            await member.send("You should do `>getcode` in the channel welcome. <#424594608564076544> <-- clickable.")
+            await member.send("Then I'll send you some numbers and you can type those in the welcome place!")
+            await member.send(":D")
             def find(rolename):
                 for role in member.guild.roles:
                     if role.name == rolename:
