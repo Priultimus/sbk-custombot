@@ -1,40 +1,16 @@
 from discord.ext import commands
-import logging
 import textwrap
-import os
 import traceback
 import git
 import asyncio
-import sys
 import inspect
-import textwrap
 from contextlib import redirect_stdout
 import io
-from __main__ import update, read, write, list_update
+from __main__ import DataManager
+from __main__ import Checks
 # to expose to the eval command
 import discord
-import datetime
-from collections import Counter
 
-def is_owner():
-    def pred(ctx):
-        if ctx.author.id in read()['owners']:
-            return True
-        else:
-            return False
-    return commands.check(pred)
-
-def restart_program():
-
-    """Restarts the current program.
-
-    Note: this function does not return. Any cleanup action (like
-
-    saving data) must be done before calling this function."""
-
-    python = sys.executable
-
-    os.execl(python, python, * sys.argv)
 
 class Developer:
     """Developer commands"""
@@ -57,11 +33,11 @@ class Developer:
     def get_syntax_error(self, e):
         if e.text is None:
             return f'```py\n{e.__class__.__name__}: {e}\n```'
-        return f'```py\n{e.text}{"^":>{e.offset}}\n{e.__class__.__name__}: {e}```'
-
+        return f"""```py\n{e.text}{"^":>{e.offset}}\n{e.__class__.__name__}:
+        {e}```"""
 
     @commands.command(name='eval')
-    @is_owner()
+    @Checks.is_owner()
     async def _eval(self, ctx, *, body: str):
         """Evaluates code"""
 
@@ -100,7 +76,7 @@ class Developer:
             value = stdout.getvalue()
             try:
                 await ctx.message.add_reaction('\u2705')
-            except:
+            except Exception as e:
                 pass
 
             if ret is None:
@@ -111,7 +87,7 @@ class Developer:
                 await ctx.send(f'```py\n{value}{ret}\n```')
 
     @commands.command(pass_context=True, hidden=True)
-    @is_owner()
+    @Checks.is_owner()
     async def repl(self, ctx):
         """Launches an interactive REPL session."""
         variables = {
@@ -126,11 +102,13 @@ class Developer:
         }
 
         if ctx.channel.id in self.sessions:
-            await ctx.send('Already running a REPL session in this channel. Exit it with `quit`.')
+            await ctx.send('Already running a REPL session in this channel.'
+                           ' Exit it with `quit`.')
             return
 
         self.sessions.add(ctx.channel.id)
-        await ctx.send('Enter code to execute or evaluate. `exit()` or `quit` to exit.')
+        await ctx.send('Enter code to execute or evaluate. `exit()` or `quit`'
+                       ' to exit.')
 
         def check(m):
             return m.author.id == ctx.author.id and \
@@ -139,7 +117,8 @@ class Developer:
 
         while True:
             try:
-                response = await ctx.bot.wait_for('message', check=check, timeout=10.0 * 60.0)
+                response = await ctx.bot.wait_for('message', check=check,
+                                                  timeout=10.0 * 60.0)
 
             except asyncio.TimeoutError:
                 await ctx.send('Exiting REPL session.')
@@ -203,7 +182,7 @@ class Developer:
                 await ctx.send(f'Unexpected error: `{e}`')
 
     @commands.command()
-    @is_owner()
+    @Checks.is_owner()
     async def git(self, ctx, *pull):
         """Pull from github."""
         g = git.cmd.Git("./")
@@ -211,27 +190,27 @@ class Developer:
         e.set_author(name="Git Pull", icon_url=ctx.bot.user.avatar_url)
         e.add_field(name="Status:", value=g.pull())
         await ctx.send(embed=e)
-        restart_program()
+        ctx.bot.restart()
 
     @commands.command()
-    @is_owner()
+    @Checks.is_owner()
     async def shutdown(self, ctx):
         await ctx.send("Shutting down...")
         await ctx.bot.logout()
 
     @commands.command()
-    @is_owner()
+    @Checks.is_owner()
     async def restart(self, ctx):
         await ctx.send("Restarting...")
-        restart_program()
+        ctx.bot.restart()
 
     @commands.command()
     @commands.is_owner()
-    async def owner(self, ctx, member:discord.Member):
-        list_update('owners', member.id)
+    async def owner(self, ctx, member: discord.Member):
+        DataManager.list_update('data/bot.json', 'OWNERS', member.id)
         await ctx.send("Updated owner!")
 
 
 def setup(bot):
     bot.add_cog(Developer(bot))
-    print("Loaded Developer.")
+    print("Loaded Dev.")
