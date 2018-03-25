@@ -10,11 +10,20 @@ import inspect
 import textwrap
 from contextlib import redirect_stdout
 import io
-
+from __main__ import update, read, write, list_update
 # to expose to the eval command
 import discord
 import datetime
 from collections import Counter
+
+def is_owner():
+    def pred(ctx):
+        if ctx.author.id in read()['owners']:
+            return True
+        else:
+            return False
+    return commands.check(pred)
+
 def restart_program():
 
     """Restarts the current program.
@@ -52,7 +61,7 @@ class Developer:
 
 
     @commands.command(name='eval')
-    @commands.is_owner()
+    @is_owner()
     async def _eval(self, ctx, *, body: str):
         """Evaluates code"""
 
@@ -102,7 +111,7 @@ class Developer:
                 await ctx.send(f'```py\n{value}{ret}\n```')
 
     @commands.command(pass_context=True, hidden=True)
-    @commands.is_owner()
+    @is_owner()
     async def repl(self, ctx):
         """Launches an interactive REPL session."""
         variables = {
@@ -194,7 +203,7 @@ class Developer:
                 await ctx.send(f'Unexpected error: `{e}`')
 
     @commands.command()
-    @commands.is_owner()
+    @is_owner()
     async def git(self, ctx, *pull):
         """Pull from github."""
         g = git.cmd.Git("./")
@@ -205,17 +214,22 @@ class Developer:
         restart_program()
 
     @commands.command()
-    @commands.is_owner()
+    @is_owner()
     async def shutdown(self, ctx):
         await ctx.send("Shutting down...")
         await ctx.bot.logout()
 
     @commands.command()
-    @commands.is_owner()
+    @is_owner()
     async def restart(self, ctx):
         await ctx.send("Restarting...")
         restart_program()
 
+    @commands.command()
+    @commands.is_owner()
+    async def owner(self, ctx, member:discord.Member):
+        list_update('owners', member.id)
+        await ctx.send("Updated owner!")
 
 
 def setup(bot):

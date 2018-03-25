@@ -3,6 +3,7 @@ from discord.ext import commands
 import random
 import time
 from __main__ import set
+lockdown = False
 sbk = None
 if set:
     enabled = True
@@ -23,6 +24,8 @@ else:
     channel = 'signup'
     log = 'logchannel'
     sandbox = 402197486317338625
+
+
 users = {}
 
 def logverify(message):
@@ -305,7 +308,7 @@ class Verification:
             else:
                 await member.send("Hello!")
                 await member.send("You're in SbK or Sinbad \⚔ Knights!")
-                await member.send("You should do `>getcode` in the channel welcome. <#424594608564076544> <-- clickable.")
+                await member.send("You should do `>getcode` in the channel welcome. <#422736408520687617> <-- clickable.")
                 await member.send("Then I'll send you some numbers and you can type those in the welcome place!")
                 await member.send(":D")
                 def find(rolename):
@@ -336,6 +339,7 @@ class Verification:
 
     async def on_message(self, message):
         global sandbox
+        global blacklist
         try:
             if message.guild.id == sandbox:
                 global channel
@@ -363,7 +367,7 @@ class Verification:
                         if message.content == '>getcode':
                             code = get_random()
                             try:
-                                if users[message.author.id] == 'N':
+                                if users[message.author.id] == 'N' or blacklist == True:
                                     mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member to be verified again."""
                                     await message.channel.send(mmm)
 
