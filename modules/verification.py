@@ -306,11 +306,12 @@ class Verification:
             if not member.guild.id == sandbox:
                 pass
             else:
-                await member.send("Hello!")
-                await member.send("You're in SbK or Sinbad \⚔ Knights!")
-                await member.send("You should do `>getcode` in the channel welcome. <#422736408520687617> <-- clickable.")
-                await member.send("Then I'll send you some numbers and you can type those in the welcome place!")
-                await member.send(":D")
+                await member.send("""
+                Hello!\n
+You're in SbK or Sinbad :crossed_swords: Knights!\n
+You should do \`>getcode` in the channel welcome. \#welcome <-- clickable.\n
+Then I'll send you some numbers and you can type those in the welcome place!\n
+:D""")
                 def find(rolename):
                     for role in member.guild.roles:
                         if role.name == rolename:
