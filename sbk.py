@@ -106,7 +106,7 @@ if not set:
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136)
 
-bot.load_extension(f"modules.developer")
+bot.load_extension(f"modules.dev")
 bot.load_extension(f"modules.roles")
 bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
