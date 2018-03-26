@@ -12,6 +12,14 @@ if sys.argv == ['sbk.py', '-test']:
 else:
     set = True
 
+
+def write(a, b):
+    with open("data.json", "r") as jsonFile:
+        data = json.load(jsonFile)
+    data[a] = b
+    with open("data.json", "w") as jsonFile:
+        json.dump(data, jsonFile)    
+
 def update(a, b):
     with open("data.json", "r") as jsonFile:
         data = json.load(jsonFile)
