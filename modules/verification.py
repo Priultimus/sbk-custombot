@@ -221,6 +221,17 @@ class Verification:
         else:
             enabled = True
             await ctx.send("✅ | Enabled verification!")
+            
+   @_verif.command()
+   @commands.has_permissions(ban_members=True)
+   async def lockdown(self, ctx):
+        global lockdown 
+        if lockdown:
+            lockdown = False
+            await ctx.send("✅ | Lockdown ended!")
+        else:
+            lockdown = True
+            await ctx.send("⚠ | Sbk is now in lockdown. 😬")
 
     @_verif.command()
     @commands.has_permissions(ban_members=True)
@@ -340,7 +351,7 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
 
     async def on_message(self, message):
         global sandbox
-        global blacklist
+        global lockdown
         try:
             if message.guild.id == sandbox:
                 global channel
@@ -368,7 +379,7 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                         if message.content == '>getcode':
                             code = get_random()
                             try:
-                                if users[message.author.id] == 'N' or blacklist == True:
+                                if users[message.author.id] == 'N' or lockdown:
                                     mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member to be verified again."""
                                     await message.channel.send(mmm)
 
