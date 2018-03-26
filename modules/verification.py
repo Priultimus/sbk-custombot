@@ -222,16 +222,16 @@ class Verification:
             enabled = True
             await ctx.send("✅ | Enabled verification!")
             
-   @_verif.command()
-   @commands.has_permissions(ban_members=True)
-   async def lockdown(self, ctx):
-        global lockdown 
-        if lockdown:
-            lockdown = False
-            await ctx.send("✅ | Lockdown ended!")
-        else:
-            lockdown = True
-            await ctx.send("⚠ | Sbk is now in lockdown. 😬")
+    @_verif.command()
+    @commands.has_permissions(ban_members=True)
+    async def lockdown(self, ctx):
+         global lockdown 
+         if lockdown:
+             lockdown = False
+             await ctx.send("✅ | Lockdown ended!")
+         else:
+             lockdown = True
+             await ctx.send("⚠ | Sbk is now in lockdown. 😬")
 
     @_verif.command()
     @commands.has_permissions(ban_members=True)
