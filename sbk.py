@@ -72,19 +72,13 @@ class Bot(commands.AutoShardedBot):
             except AttributeError:
                 pass
     async def on_command_error(self, ctx, error):
-
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context
         error : Exception"""
 
-        # This prevents any commands with local handlers being handled here in on_command_error.
         if hasattr(ctx.command, 'on_error'):
             return
-
         ignored = (commands.CommandNotFound, commands.UserInputError)
-
-        # Allows us to check for original exceptions raised and sent to CommandInvokeError.
-        # If nothing is found. We keep the exception passed to on_command_error.
         error = getattr(error, 'original', error)
 
         # Anything in ignored will return and prevent anything happening.
@@ -96,18 +90,22 @@ class Bot(commands.AutoShardedBot):
 
         elif isinstance(error, commands.NoPrivateMessage):
             try:
-                return await ctx.author.send(f'❌ | {ctx.command} can not be used in Private Messages.')
-            except:
+                return await ctx.author.send(f"""❌ | {ctx.command}
+                cannot be used in Private Messages.""")
+            except Exception as e:
                 pass
+        elif isinstance(error, discord.errors.Forbidden):
+            await ctx.send(f"❌ | I lack the required permissions"
+                           "to execute this command properly.")
 
-        # For this error example we check to see where it came from...
-     #   elif isinstance(error, commands.BadArgument):
-     #       if ctx.command.qualified_name == 'tag list':  # Check if the command being invoked is 'tag list'
-     #           return await ctx.send('I could not find that member. Please try again.')
-
-        # All other Errors not returned come here... And we can just print the default TraceBack.
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+        else:
+            if ctx.author.id in [286246724270555136]: # DataManager class doesn't exist yet, using best alternative
+                await ctx.author.send('Ignoring exception in command {}:'
+                                      .format(ctx.command), file=sys.stderr)
+            print('Ignoring exception in command {}:'
+                  .format(ctx.command), file=sys.stderr)
+        traceback.print_exception(type(error), error, error.__traceback__,
+                                  file=sys.stderr)
 
 if not set:
     bot = Bot(command_prefix=">>", owner_id=286246724270555136)
