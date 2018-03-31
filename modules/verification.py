@@ -2,10 +2,12 @@ import discord
 from discord.ext import commands
 import random
 import time
-from __main__ import set
+from __main__ import test, DataManager
+
 lockdown = False
 sbk = None
-if set:
+
+if not test:
     enabled = True
     verifmsg = """**__Verification!__**
 **~** In order to get verified you must do some things!
@@ -28,6 +30,7 @@ else:
 
 users = {}
 
+
 def logverify(message):
     embed = discord.Embed(colour=0x77B255, timestamp=message.created_at)
     embed.set_author(name="User Verified Successfully!", icon_url="https://i.imgur.com/SuDtnYE.png%22")
@@ -35,6 +38,7 @@ def logverify(message):
     embed.set_thumbnail(url=message.author.avatar_url)
     embed.add_field(name="Member:", value=f"{message.author.name}#{message.author.discriminator}\n", inline=False)
     return embed
+
 
 def mlogverify(member, message, mod, reason=None):
     embed = discord.Embed(colour=0x77B255, timestamp=message.created_at)
@@ -47,6 +51,7 @@ def mlogverify(member, message, mod, reason=None):
         embed.add_field(name="Reason:", value=reason, inline=False)
     return embed
 
+
 def lunverify(member, message, mod, reason=None):
     embed = discord.Embed(colour=0xDD2E44, timestamp=message.created_at)
     embed.set_author(name="User Unverified!", icon_url="https://i.imgur.com/0owUvc3.png")
@@ -58,9 +63,11 @@ def lunverify(member, message, mod, reason=None):
         embed.add_field(name="Reason:", value=reason, inline=False)
     return embed
 
+
 def get_random():
     for i in random.sample(range(1000000, 9999999), 1):
         return i
+
 
 class Verification:
     """The verification thing."""
@@ -71,14 +78,7 @@ class Verification:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def sandbox(self, ctx, guild_id:int):
-        global sandbox
-        sandbox = guild_id
-        await ctx.send("✅ | I've successfully switched servers!")
-
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def setrole(self, ctx, rolename:str):
+    async def setrole(self, ctx, rolename: str):
 
         def find(rolename):
             for role in ctx.guild.roles:
@@ -86,7 +86,7 @@ class Verification:
                     return role
 
         global roles
-        if not find(rolename) == None:
+        if not find(rolename) is None:
             roles = rolename
             await ctx.send(f"✅ | Set the Unverified role to `{rolename}`!")
         else:
@@ -96,6 +96,7 @@ class Verification:
     @commands.has_permissions(ban_members=True)
     async def welcomechannel(self, ctx, cid):
         global channel
+
         def cfind(channel):
             for c in ctx.guild.channels:
                 if c.name == channel:
@@ -109,7 +110,7 @@ class Verification:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unverify(self, ctx, user:discord.Member, *reason):
+    async def unverify(self, ctx, user: discord.Member, *reason):
         reason = ' '.join(reason)
 
         def find(rolename):
@@ -139,7 +140,7 @@ class Verification:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def setlogchannel(self, ctx, logch:str):
+    async def setlogchannel(self, ctx, logch: str):
         global log
 
         def cfind(channel):
@@ -156,8 +157,9 @@ class Verification:
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def verify(self, ctx, user:discord.Member, *reason):
+    async def verify(self, ctx, user: discord.Member, *reason):
         reason = ' '.join(reason)
+
         def find(rolename):
             for role in ctx.guild.roles:
                 if role.name == rolename:
@@ -177,6 +179,7 @@ class Verification:
             await user.remove_roles(role)
             c = cfind(str(log))
             rr = cfind(str(channel))
+
             def is_me(m):
                 return (m.author == user or m.author.bot) and ("Verification!" not in m.content)
 
@@ -184,8 +187,8 @@ class Verification:
             await ctx.message.delete()
             await c.send(embed=mlogverify(user, ctx.message, ctx.author, reason))
             try:
-               await user.send("✅ | You've successfully been verified!")
-            except:
+                await user.send("✅ | You've successfully been verified!")
+            except Exception as e:
                 pass
             users[user.id] = None
             await ctx.message.delete()
@@ -221,17 +224,6 @@ class Verification:
         else:
             enabled = True
             await ctx.send("✅ | Enabled verification!")
-            
-    @_verif.command()
-    @commands.has_permissions(ban_members=True)
-    async def lockdown(self, ctx):
-         global lockdown 
-         if lockdown:
-             lockdown = False
-             await ctx.send("✅ | Lockdown ended!")
-         else:
-             lockdown = True
-             await ctx.send("⚠ | Sbk is now in lockdown. 😬")
 
     @_verif.command()
     @commands.has_permissions(ban_members=True)
@@ -250,7 +242,6 @@ class Verification:
         else:
             enabled = False
             await ctx.send("✅ | Disabled verification!")
-
 
     @_verif.command()
     @commands.has_permissions(ban_members=True)
@@ -283,6 +274,7 @@ class Verification:
             if count:
                 count = ' '.join(count)
                 count = int(count)
+
                 def eck(s):
                     if "Verification!" not in s.content:
                         return True
@@ -306,6 +298,7 @@ class Verification:
         global channel
         a = await discord.utils.get(ctx.guild.channels, name=channel).send(verifmsg)
         await a.pin()
+
         def check(s):
             return "Verification!" not in s.content
 
@@ -314,7 +307,7 @@ class Verification:
     async def on_member_join(self, member):
         global sandbox
         try:
-            if not member.guild.id == sandbox:
+            if not member.guild.id == DataManager.read('data/bot.json')['SERVER']:
                 pass
             else:
                 await member.send("""
@@ -323,6 +316,7 @@ You're in SbK or Sinbad :crossed_swords: Knights!\n
 You should do \`>getcode` in the channel welcome. \#welcome <-- clickable.\n
 Then I'll send you some numbers and you can type those in the welcome place!\n
 :D""")
+
                 def find(rolename):
                     for role in member.guild.roles:
                         if role.name == rolename:
@@ -333,8 +327,6 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
         except AttributeError:
             pass
 
-
-
     async def on_message_delete(self, message):
         if "Verification!" in message.content:
             global channel
@@ -344,6 +336,7 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                 await b.purge(limit=100)
                 a = await message.channel.send(verifmsg)
                 await a.pin()
+
                 def check(s):
                     return "Verification!" not in s.content
 
@@ -352,9 +345,11 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
     async def on_message(self, message):
         global sandbox
         global lockdown
+
         try:
             if message.guild.id == sandbox:
                 global channel
+
                 def find(rolename):
                     for role in message.guild.roles:
                         if role.name == rolename:
@@ -375,19 +370,19 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                         users[message.author.id]
                     except KeyError:
                         users[message.author.id] = None
-                    if enabled == True:
+                    if enabled:
                         if message.content == '>getcode':
                             code = get_random()
                             try:
-                                if users[message.author.id] == 'N' or lockdown:
-                                    mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member to be verified again."""
+                                if users[message.author.id] == 'N' or lockdown == True:
+                                    mmm = """⚠ | **You have been manually unverified.**\nPlease read <#425815476342489090> and ping an online staff member to be verified again."""
                                     await message.channel.send(mmm)
 
                                 else:
                                     users[message.author.id] = str(code)
                                     try:
                                         await message.author.send(f"▶ | Use code `{code}` in <#{chan.id}> to authorize yourself!")
-                                    except:
+                                    except Exception as e:
                                         e = await message.channel.send(f"❌ | {message.author.mention}, I cannot DM you!")
                                         time.sleep(10)
                                         await e.delete()
@@ -409,12 +404,12 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                                 if message.author.bot:
                                     pass
                                 else:
-                                    if users[message.author.id] == 'N':
+                                    if users[message.author.id] == 'N' or lockdown:
                                         pass
                                     else:
                                         try:
                                             await message.delete()
-                                        except:
+                                        except Exception as e:
                                             pass
                             users[message.author.id] = None
                             print("Nin.")
@@ -434,7 +429,6 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                     pass
         except AttributeError:
             pass
-
 
 
 def setup(bot):
