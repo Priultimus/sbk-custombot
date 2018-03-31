@@ -165,9 +165,9 @@ class Roles:
 
     @commands.command()
     @Checks.is_staff()
-    async def mentionable(self, ctx, rolename: str):
+    async def mentionable(self, ctx, rolename):
         role = discord.utils.get(ctx.guild.roles, name=rolename)
-        if role is not None:
+        if role != None:
             await role.edit(mentionable=True)
             await ctx.send(f"✅ | `{rolename}` is now mentionable!")
         else:
@@ -175,7 +175,7 @@ class Roles:
 
     @commands.command()
     @Checks.is_staff()
-    async def notmentionable(self, ctx, rolename: str):
+    async def notmentionable(self, ctx, rolename):
         role = discord.utils.get(ctx.guild.roles, name=rolename)
         if role is not None:
             await role.edit(mentionable=False)
