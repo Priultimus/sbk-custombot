@@ -207,6 +207,61 @@ class Roles:
                     raise e
         else:
             await ctx.send("❌ | You lack the required permissions to execute this command.")
+            
+    @commands.command()
+    @Checks.is_staff()
+    async def mentionable(self, ctx, rolename: str):
+        role = discord.utils.get(ctx.guild.roles, name=rolename)
+        if role is not None:
+            await role.edit(mentionable=True)
+            await ctx.send(f"✅ | `{rolename}` is now mentionable!")
+        else:
+            await ctx.send("❌ | I couldn't find that role.")
+
+    @commands.command()
+    @Checks.is_staff()
+    async def notmentionable(self, ctx, rolename: str):
+        role = discord.utils.get(ctx.guild.roles, name=rolename)
+        if role is not None:
+            await role.edit(mentionable=False)
+            await ctx.send(f"✅ | `{rolename}` is no longer mentionable!")
+        else:
+            await ctx.send("❌ | I couldn't find that role.")
+
+    @commands.command()
+    @Checks.is_staff()
+    async def mention(self, ctx, role: str, *message):
+        role = discord.utils.get(ctx.guild.roles, name=role)
+        message = ' '.join(message)
+        print(message)
+        message = str(message)
+        print(message)
+        if None:
+            new_message = message - "-c"
+
+            channels = ctx.message.channel_mentions if ctx.message.channel_mentions != [] else None
+            if role is not None:
+                if channels is not None:
+                    await role.edit(mentionable=True)
+                    for channel in channels:
+                        await channel.send(f"<@&{role.id}> " + new_message)
+                        break
+                    if len(channels) > 1:
+                        await ctx.send("Only going sent it in one channel.")
+                    await role.edit(mentionable=False)
+                else:
+                    await ctx.send("When adding the -c flag, you must mention a channel.")
+            else:
+                await ctx.send("I couldn't find that role.")
+        else:
+            if role is not None:
+                await role.edit(mentionable=True)
+                apples = await ctx.send(f"<@&{role.id}>" + message)
+                await apples.delete()
+                await ctx.message.delete()
+                await role.edit(mentionable=False)
+            else:
+                await ctx.send("❌ | I couldn't find that role.")
 
     async def on_member_update(self, before, after):
         try:
