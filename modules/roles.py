@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import emoji
-from __main__ import DataManager
+from __main__ import DataManager, Checks
 
 
 def lunverify(member, message, mod, reason=None):
@@ -33,8 +33,8 @@ class Roles:
         if not str(member.id) in DataManager.read('data/artblacklist.json'):
             try:
                 await member.add_roles(role, reason=f"[Artist command executed"
-                                       " by:{ctx.author.name}#"
-                                       "{ctx.author.discriminator}]")
+                                       f" by:{ctx.author.name}#"
+                                       f"{ctx.author.discriminator}]")
                 await ctx.send(f"✅ | {member.mention} is now an artist!")
             except Exception as e:
                 if ctx.author.id == 286246724270555136:
@@ -58,8 +58,8 @@ class Roles:
         try:
             await member.remove_roles(role,
                                       reason=f"[Artist command executed "
-                                      "by:{ctx.author.name}#"
-                                      "{ctx.author.discriminator}]"
+                                      f"by:{ctx.author.name}#"
+                                      f"{ctx.author.discriminator}]"
                                       )
             await ctx.send(f"✅ | {member.mention} is no longer an artist!")
         except Exception as e:
@@ -132,11 +132,11 @@ class Roles:
                     await member.remove_roles(role,
                                               reason=f"[Blacklisted user"
                                               f"{member.name}"
-                                              "#{member.discriminator}]"
+                                              f"#{member.discriminator}]"
                                               )
 
                 await ctx.send(f"✅ | Successfully blacklisted"
-                               "{member.name}#{member.discriminator}.")
+                               f"{member.name}#{member.discriminator}.")
             else:
                 role = discord.utils.get(ctx.guild.roles, name='Artist')
                 check = discord.utils.get(member.roles, name='Artist')
@@ -163,6 +163,61 @@ class Roles:
         else:
             await ctx.send("❌ | That user is not blacklisted!")
 
+    @commands.command()
+    @Checks.is_staff()
+    async def mentionable(self, ctx, rolename: str):
+        role = discord.utils.get(ctx.guild.roles, name=rolename)
+        if role is not None:
+            await role.edit(mentionable=True)
+            await ctx.send(f"✅ | `{rolename}` is now mentionable!")
+        else:
+            await ctx.send("❌ | I couldn't find that role.")
+
+    @commands.command()
+    @Checks.is_staff()
+    async def notmentionable(self, ctx, rolename: str):
+        role = discord.utils.get(ctx.guild.roles, name=rolename)
+        if role is not None:
+            await role.edit(mentionable=False)
+            await ctx.send(f"✅ | `{rolename}` is no longer mentionable!")
+        else:
+            await ctx.send("❌ | I couldn't find that role.")
+
+    @commands.command()
+    @Checks.is_staff()
+    async def mention(self, ctx, role: str, *message):
+        role = discord.utils.get(ctx.guild.roles, name=role)
+        message = ' '.join(message)
+        print(message)
+        message = str(message)
+        print(message)
+        if None:
+            new_message = message - "-c"
+
+            channels = ctx.message.channel_mentions if ctx.message.channel_mentions != [] else None
+            if role is not None:
+                if channels is not None:
+                    await role.edit(mentionable=True)
+                    for channel in channels:
+                        await channel.send(f"<@&{role.id}> " + new_message)
+                        break
+                    if len(channels) > 1:
+                        await ctx.send("Only going sent it in one channel.")
+                    await role.edit(mentionable=False)
+                else:
+                    await ctx.send("When adding the -c flag, you must mention a channel.")
+            else:
+                await ctx.send("I couldn't find that role.")
+        else:
+            if role is not None:
+                await role.edit(mentionable=True)
+                apples = await ctx.send(f"<@&{role.id}>" + message)
+                await apples.delete()
+                await ctx.message.delete()
+                await role.edit(mentionable=False)
+            else:
+                await ctx.send("❌ | I couldn't find that role.")
+
     @commands.command(aliases=['addrole'])
     async def add(self, ctx, member: discord.Member, *roles):
         ca = discord.utils.get(ctx.author.roles, name='Challenge Approver')
@@ -180,11 +235,11 @@ class Roles:
                         if ctx.author.roles[role_count] > roles:
                             await member.add_roles(roles, reason=f"[Command "
                                                    "executed by "
-                                                   "{ctx.author.name}#"
-                                                   "{ctx.author.discriminator}"
+                                                   f"{ctx.author.name}#"
+                                                   f"{ctx.author.discriminator}"
                                                    )
                             await ctx.send(f"✅ | Successfully added role"
-                                           "`{roles.name}` to {member.mention}"
+                                           f"`{roles.name}` to {member.mention}"
                                            "!")
                         else:
                             await ctx.send("❌ | That role is higher than your"
@@ -249,8 +304,8 @@ class Roles:
                 if str(after.id) in DataManager.read('data/artblacklist.json'):
                     await after.remove_roles(role,
                                              reason=f"[Blacklisted user "
-                                             "{after.name}#"
-                                             "{after.discriminator}]"
+                                             f"{after.name}#"
+                                             f"{after.discriminator}]"
                                              )
         except Exception as e:
             raise e

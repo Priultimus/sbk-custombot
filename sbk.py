@@ -2,10 +2,15 @@ import os
 import traceback
 import sys
 import json
+import discord
 from discord.ext import commands
 import logging
+import platform
 
 logging.basicConfig(level=logging.INFO)
+
+test = True if platform.system() == 'Windows' or \
+ sys.argv == ['sbk.py', '-test'] else None
 
 
 class DataManager:
@@ -54,10 +59,17 @@ else:
 class Checks:
     def is_owner():
         async def pred(ctx):
-            if id in DataManager.read('data/bot.json')['OWNERS']:
+            if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
                 return True
             else:
                 return False
+        return commands.check(pred)
+
+    def is_staff():
+        async def pred(ctx):
+            role = discord.utils.get(ctx.author.roles, name='Staff')
+            if role is not None:
+                return True
         return commands.check(pred)
 
 
@@ -81,8 +93,13 @@ class Bot(commands.AutoShardedBot):
         print("Ready!")
 
     async def on_message(self, message):
-        if message.guild.id == DataManager.read('data/bot.json')['SERVER']:
-            await self.process_commands(message)
+        id = message.author.id
+        try:
+            if message.guild.id == DataManager.read('data/bot.json')['SERVER']:
+                await self.process_commands(message)
+        except AttributeError:
+            if id in DataManager.read('data/bot.json')['OWNERS']:
+                await self.process_commands(message)
 
     async def on_message_edit(self, before, after):
         if after.guild.id == DataManager.read('data/bot.json')['SERVER']:
@@ -111,9 +128,16 @@ class Bot(commands.AutoShardedBot):
                 cannot be used in Private Messages.""")
             except Exception as e:
                 pass
+        elif isinstance(error, discord.errors.Forbidden):
+            await ctx.send(f"❌ | I lack the required permissions"
+                           "to execute this command properly.")
 
-        print('Ignoring exception in command {}:'
-              .format(ctx.command), file=sys.stderr)
+        else:
+            if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
+                await ctx.author.send('Ignoring exception in command {}:'
+                                      .format(ctx.command), file=sys.stderr)
+            print('Ignoring exception in command {}:'
+                  .format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__,
                                   file=sys.stderr)
 
@@ -127,8 +151,8 @@ bot.load_extension(f"modules.dev")
 bot.load_extension(f"modules.roles")
 bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
+bot.load_extension("modules.challenges")
 
 if test:
     print("--- Testing mode active! ----")
-    print(os.environ)
 bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DZmBpg.rFHBcAQlu0z2hVr9AyvRmANUpKQ')

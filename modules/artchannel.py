@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-from __main__ import set
-if set:
+from __main__ import test
+if test:
     channel = 'art'
 else:
     channel = 'custombot-testing'

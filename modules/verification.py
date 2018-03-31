@@ -2,12 +2,12 @@ import discord
 from discord.ext import commands
 import random
 import time
-from __main__ import set, DataManager
+from __main__ import test, DataManager
 
 lockdown = False
 sbk = None
-DataManager.read
-if set:
+
+if not test:
     enabled = True
     verifmsg = """**__Verification!__**
 **~** In order to get verified you must do some things!
@@ -344,7 +344,7 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
 
     async def on_message(self, message):
         global sandbox
-        global blacklist
+        global lockdown
 
         try:
             if message.guild.id == sandbox:
@@ -374,8 +374,8 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                         if message.content == '>getcode':
                             code = get_random()
                             try:
-                                if users[message.author.id] == 'N' or blacklist == True:
-                                    mmm = """⚠ | **You have been manually unverified.**\nPlease read <#404992099478405122> and ping an online staff member to be verified again."""
+                                if users[message.author.id] == 'N' or lockdown == True:
+                                    mmm = """⚠ | **You have been manually unverified.**\nPlease read <#425815476342489090> and ping an online staff member to be verified again."""
                                     await message.channel.send(mmm)
 
                                 else:
@@ -404,7 +404,7 @@ Then I'll send you some numbers and you can type those in the welcome place!\n
                                 if message.author.bot:
                                     pass
                                 else:
-                                    if users[message.author.id] == 'N':
+                                    if users[message.author.id] == 'N' or lockdown:
                                         pass
                                     else:
                                         try:
