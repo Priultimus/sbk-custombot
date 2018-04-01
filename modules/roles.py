@@ -208,7 +208,7 @@ class Roles:
                 if channels is not None:
                     await role.edit(mentionable=True)
                     for channel in channels:
-                        await channel.send(f"<@&{role.id}> " + new_message)
+                        await channel.send(f"<@&{role.id}>")
                         break
                     if len(channels) > 1:
                         await ctx.send("Only going sent it in one channel.")
@@ -220,7 +220,7 @@ class Roles:
         else:
             if role is not None:
                 await role.edit(mentionable=True)
-                apples = await ctx.send(f"<@&{role.id}>" + message)
+                apples = await ctx.send(f"<@&{role.id}>")
                 await apples.delete()
                 await ctx.message.delete()
                 await role.edit(mentionable=False)
