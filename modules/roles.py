@@ -165,33 +165,42 @@ class Roles:
 
     @commands.command()
     @Checks.is_staff()
-    async def mentionable(self, ctx, rolename):
-        role = discord.utils.get(ctx.guild.roles, name=rolename)
-        if role != None:
-            await role.edit(mentionable=True)
-            await ctx.send(f"✅ | `{rolename}` is now mentionable!")
+    async def mentionable(self, ctx, *rolename):
+        if not rolename:
+            await ctx.send("❌ | You need to provide a rolename!")
         else:
-            await ctx.send("❌ | I couldn't find that role.")
+            rolename = ' '.join(rolename)
+            rolename = str(rolename)
+            role = discord.utils.get(ctx.guild.roles, name=rolename)
+            if role != None:
+                await role.edit(mentionable=True)
+                await ctx.send(f"✅ | `{rolename}` is now mentionable!")
+            else:
+                await ctx.send("❌ | I couldn't find that role.")
 
     @commands.command()
     @Checks.is_staff()
-    async def notmentionable(self, ctx, rolename):
-        role = discord.utils.get(ctx.guild.roles, name=rolename)
-        if role is not None:
-            await role.edit(mentionable=False)
-            await ctx.send(f"✅ | `{rolename}` is no longer mentionable!")
+    async def notmentionable(self, ctx, *rolename):
+        if not rolename:
+            await ctx.send("❌ | You need to provide a rolename!")
         else:
-            await ctx.send("❌ | I couldn't find that role.")
+            rolename = ' '.join(rolename)
+            rolename = str(rolename)
+            role = discord.utils.get(ctx.guild.roles, name=rolename)
+            if role != None:
+                await role.edit(mentionable=True)
+                await ctx.send(f"✅ | `{rolename}` is no longer mentionable!")
+            else:
+                await ctx.send("❌ | I couldn't find that role.")
 
     @commands.command()
     @Checks.is_staff()
-    async def mention(self, ctx, role: str, *message):
+    async def mention(self, ctx, *role):
+        role = ' '.join(role)
+        role = str(role)
         role = discord.utils.get(ctx.guild.roles, name=role)
-        message = ' '.join(message)
-        print(message)
-        message = str(message)
-        print(message)
-        if None:
+        this_is_useless_code = None
+        if this_is_useless_code:
             new_message = message - "-c"
 
             channels = ctx.message.channel_mentions if ctx.message.channel_mentions != [] else None
