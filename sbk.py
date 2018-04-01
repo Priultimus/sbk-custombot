@@ -134,8 +134,8 @@ class Bot(commands.AutoShardedBot):
 
         else:
             if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
-                await ctx.author.send('Ignoring exception in command {}:'
-                                      .format(ctx.command), file=sys.stderr)
+               # await ctx.author.send('Ignoring exception in command {}:'
+               #                       .format(ctx.command), file=sys.stderr)
             print('Ignoring exception in command {}:'
                   .format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__,
