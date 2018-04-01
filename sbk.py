@@ -133,7 +133,7 @@ class Bot(commands.AutoShardedBot):
                            "to execute this command properly.")
 
         else:
-            if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
+            # if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
                # await ctx.author.send('Ignoring exception in command {}:'
                #                       .format(ctx.command), file=sys.stderr)
             print('Ignoring exception in command {}:'
