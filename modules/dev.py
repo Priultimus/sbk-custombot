@@ -202,7 +202,7 @@ class Developer:
     @Checks.is_owner()
     async def restart(self, ctx):
         await ctx.send("Restarting...")
-        ctx.bot.restart(self)
+        ctx.bot.restart()
 
     @commands.command()
     @commands.is_owner()
