@@ -70,6 +70,21 @@ class Checks:
             role = discord.utils.get(ctx.author.roles, name='Staff')
             if role is not None:
                 return True
+            elif ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
+                return True
+            else:
+                return False
+        return commands.check(pred)
+
+    def is_ca():
+        async def pred(ctx):
+            role = discord.utils.get(ctx.author.roles, name='Challenge Approver')
+            if role is not None:
+                return True
+            elif ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
+                return True
+            else:
+                return False
         return commands.check(pred)
 
 
@@ -77,7 +92,7 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def restart(self):
+    def restart():
 
         """Restarts the current program.
 
@@ -134,8 +149,8 @@ class Bot(commands.AutoShardedBot):
 
         else:
             # if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
-               # await ctx.author.send('Ignoring exception in command {}:'
-               #                       .format(ctx.command), file=sys.stderr)
+            #    await ctx.author.send('Ignoring exception in command {}:'
+            #                          .format(ctx.command), file=sys.stderr)
             print('Ignoring exception in command {}:'
                   .format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__,
