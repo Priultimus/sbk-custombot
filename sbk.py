@@ -92,7 +92,7 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def restart():
+    def restart(self):
 
         """Restarts the current program.
 
