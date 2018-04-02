@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import gspread
+from __main__ import Checks
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ['https://spreadsheets.google.com/feeds']
@@ -9,7 +10,7 @@ keyfile = 'data/h0r1zonz-b3fc89528e7d.json'
 credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile, scope)
 
 gc = gspread.authorize(credentials)
-sheet = gc.open_by_key('1iEsS6hcOQejOFK7DgduHfpvZN7tVfbkdQbq_yR0Xwro')
+sheet = gc.open_by_key('150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w')
 worksheet = sheet.get_worksheet(0)
 val = worksheet.acell('B2').value
 
@@ -19,11 +20,13 @@ class Challenges:
 
     @commands.command()
     async def test(self, ctx):
-        global val
-        await ctx.send(val)
+        cell = worksheet.find(str(ctx.author.id))
+        values_list = worksheet.row_values(cell.row)
 
+
+    @Checks.is_ca()
     @commands.command()
-    async def ttest(self, ctx, user: discord.Member, pts):
+    async def addpoints(self, ctx, user: discord.Member, pts):
         errored = True
         try:
             cell = worksheet.find(str(user.id))
@@ -34,29 +37,83 @@ class Challenges:
         if errored:
             pass
         else:
-            await ctx.send(cell.value)
             values_list = worksheet.row_values(cell.row)
-            if pts.startswith('+'):
-                pts = pts.strip("+")
-                pts = int(values_list[3]) + int(pts)
-                await ctx.send(pts)
-            elif pts.startswith('-'):
-                pts = pts.strip('-')
-                pts = int(values_list[3]) - int(pts)
-                await ctx.send(pts)
+            newpts = int(values_list[3]) + int(pts)
+            col = int(cell.col) + 2
+            worksheet.update_cell(cell.row, col, newpts)
+            values_list = worksheet.row_values(cell.row)
+            await ctx.send(f"✅ | Successfully added {pts} points to {user.mention}")
+
+    @Checks.is_ca()
+    @commands.command()
+    async def removepoints(self, ctx, user: discord.Member, pts):
+        errored = True
+        try:
+            cell = worksheet.find(str(user.id))
+            errored = False
+        except gspread.exceptions.CellNotFound:
+            await ctx.send("❌ | I couldn't find that user...")
+            pass
+        if errored:
+            pass
+        else:
+            values_list = worksheet.row_values(cell.row)
+            if int(pts) > int(values_list[3]):
+                await ctx.send(f"❌ | {user.mention} doesn't have that many points!")
             else:
-                pts = int(pts)
-                await ctx.send(pts)
-            await ctx.send(values_list)
-            newcell = worksheet.find(values_list[3])
-            worksheet.update_cell(newcell.row, newcell.col, pts)
-            values_list = worksheet.row_values(newcell.row)
-            await ctx.send(values_list)
+                newpts = int(values_list[3]) - int(pts)
+                col = int(cell.col) + 2
+                worksheet.update_cell(cell.row, col, newpts)
+                values_list = worksheet.row_values(cell.row)
+                await ctx.send(f"✅ | Successfully removed {pts} points from {user.mention}!")
 
     @commands.command()
-    async def value(self, ctx, num: int):
-        values_list = worksheet.row_values(num)
-        await ctx.send(values_list)
+    async def points(self, ctx, member: discord.Member=None):
+        if member is None:
+            member = ctx.author
+        a = True
+        try:
+            cell = worksheet.find(str(member.id))
+            a = False
+        except gspread.exceptions.CellNotFound:
+            await ctx.send("❌ | I couldn't find that user...")
+        if not a:
+            values_list = worksheet.row_values(cell.row)
+            col_values = worksheet.col_values(cell.col)
+            pts = values_list[3]
+            embed = discord.Embed(color=member.color,
+                                  title=f"{member.name}"
+                                  f"#{member.discriminator}")
+            embed.add_field(name=f'Ranked {values_list[0]}', value=f'{values_list[5]}', inline=False)
+            val = worksheet.acell('A2').row
+            first = worksheet.row_values(val)
+            if int(values_list[0]) == 1:
+                valuemsg = f"Already the most points!"
+            elif int(values_list[0]) == 2:
+                you = int(values_list[3])
+                firsts = int(first[3])
+                catch = firsts - you + 1
+                valuemsg = f"{catch} points to go to catch up to {first[2]}(1)"
+            else:
+                ff = col_values[int(values_list[0])-1]
+                up = worksheet.find(str(ff))
+                variable = worksheet.row_values(up.row)
+                firsts = int(first[3])
+                you = int(values_list[3])
+                catch3 = int(variable[3]) - you + 1
+                catch = firsts - you + 1
+                val = f"{catch} points to catch up with {first[2]}(1)"
+                msg = f"{catch3} points to catch up with {variable[2]}({int(values_list[0])-1})"
+                valuemsg = val + '\n' + msg
+            embed.add_field(
+                            name=f"{pts} Points",
+                            value=valuemsg,
+                            inline=False
+                            )
+            embed.add_field(name=f"Points to next rank:", value=f"{values_list[4]}")
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Errored has value......")
 
 
 def setup(bot):
