@@ -4,7 +4,8 @@ import gspread
 from __main__ import Checks
 from oauth2client.service_account import ServiceAccountCredentials
 
-scope = ['https://spreadsheets.google.com/feeds']
+scope = scope = ['https://spreadsheets.google.com/feeds',
+                  'https://www.googleapis.com/auth/drive']
 keyfile = 'data/h0r1zonz-b3fc89528e7d.json'
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile, scope)
