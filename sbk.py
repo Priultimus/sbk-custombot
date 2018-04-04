@@ -144,7 +144,7 @@ class Bot(commands.AutoShardedBot):
             except Exception as e:
                 pass
         elif isinstance(error, discord.errors.Forbidden):
-            await ctx.send(f"❌ | I lack the required permissions"
+            await ctx.send(f"❌ | I lack the required permissions "
                            "to execute this command properly.")
 
         else:
