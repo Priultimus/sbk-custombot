@@ -48,7 +48,7 @@ class Developer:
         cd = await d.create_text_channel(c.name, category=discord.utils.get(d.channels, name='Backup-channels'))
         for m in messages:
             await cd.send(m.content)
-        await ctx.send(f"✅ | Successfully backed up channel {channel.mention!}")
+        await ctx.send(f"✅ | Successfully backed up channel {channel.mention}!")
 
     @commands.command(name='eval')
     @Checks.is_owner()
