@@ -4,26 +4,20 @@ import gspread
 from __main__ import Checks
 from oauth2client.service_account import ServiceAccountCredentials
 
-scope = scope = ['https://spreadsheets.google.com/feeds',
-                  'https://www.googleapis.com/auth/drive']
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
 keyfile = 'data/h0r1zonz-b3fc89528e7d.json'
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile, scope)
 
 gc = gspread.authorize(credentials)
-sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
+sheet = gc.open_by_key('150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w')
 worksheet = sheet.get_worksheet(0)
 val = worksheet.acell('B2').value
 
 
 class Challenges:
     """Challenge Approver Module"""
-
-    @commands.command()
-    async def test(self, ctx):
-        cell = worksheet.find(str(ctx.author.id))
-        values_list = worksheet.row_values(cell.row)
-
 
     @Checks.is_ca()
     @commands.command()
@@ -34,7 +28,12 @@ class Challenges:
             errored = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
-            pass
+        except gspread.v4.exceptions.APIError:
+            global gc
+            gc = gspread.authorize(credentials)
+            cell = worksheet.find(str(user.id))
+            errored = False
+
         if errored:
             pass
         else:
@@ -55,6 +54,10 @@ class Challenges:
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
             pass
+        except gspread.v4.exceptions.APIError:
+            gc = gspread.authorize(credentials)
+            cell = worksheet.find(str(user.id))
+            errored = False
         if errored:
             pass
         else:
@@ -78,6 +81,10 @@ class Challenges:
             a = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
+        except gspread.v4.exceptions.APIError:
+            gc = gspread.authorize(credentials)
+            cell = worksheet.find(str(user.id))
+            a = False
         if not a:
             values_list = worksheet.row_values(cell.row)
             col_values = worksheet.col_values(cell.col)
@@ -113,8 +120,7 @@ class Challenges:
                             )
             embed.add_field(name=f"Points to next rank:", value=f"{values_list[4]}")
             await ctx.send(embed=embed)
-        else:
-            await ctx.send("Errored has value......")
+
 
 
 def setup(bot):
