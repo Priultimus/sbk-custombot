@@ -35,6 +35,20 @@ class Developer:
             return f'```py\n{e.__class__.__name__}: {e}\n```'
         return f"""```py\n{e.text}{"^":>{e.offset}}\n{e.__class__.__name__}:
         {e}```"""
+    
+    @commands.command()
+    @Checks.is_staff()
+    async def backup(self, ctx, channel:discord.TextChannel, limit=100):
+        c = discord.utils.get(ctx.guild.channels, id=channel.id)
+        messages = []
+        async for elem in c.history(limit=limit):
+            messages.append(elem)
+
+        d = discord.utils.get(ctx.bot.guilds, id=402197486317338625)
+        cd = await d.create_text_channel(c.name, category=discord.utils.get(d.channels, name='Backup-channels'))
+        for m in messages:
+            await cd.send(m.content)
+        await ctx.send(f"✅ | Successfully backed up channel {channel.mention!}")
 
     @commands.command(name='eval')
     @Checks.is_owner()
