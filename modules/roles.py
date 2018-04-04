@@ -199,33 +199,14 @@ class Roles:
         role = ' '.join(role)
         role = str(role)
         role = discord.utils.get(ctx.guild.roles, name=role)
-        this_is_useless_code = None
-        if this_is_useless_code:
-            new_message = message - "-c"
-
-            channels = ctx.message.channel_mentions if ctx.message.channel_mentions != [] else None
-            if role is not None:
-                if channels is not None:
-                    await role.edit(mentionable=True)
-                    for channel in channels:
-                        await channel.send(f"<@&{role.id}>")
-                        break
-                    if len(channels) > 1:
-                        await ctx.send("Only going sent it in one channel.")
-                    await role.edit(mentionable=False)
-                else:
-                    await ctx.send("When adding the -c flag, you must mention a channel.")
-            else:
-                await ctx.send("I couldn't find that role.")
+        if role is not None:
+            await role.edit(mentionable=True)
+            apples = await ctx.send(f"<@&{role.id}>")
+            await apples.delete()
+            await ctx.message.delete()
+            await role.edit(mentionable=False)
         else:
-            if role is not None:
-                await role.edit(mentionable=True)
-                apples = await ctx.send(f"<@&{role.id}>")
-                await apples.delete()
-                await ctx.message.delete()
-                await role.edit(mentionable=False)
-            else:
-                await ctx.send("❌ | I couldn't find that role.")
+            await ctx.send("❌ | I couldn't find that role.")
 
     @commands.command(aliases=['addrole'])
     async def add(self, ctx, member: discord.Member, *roles):
@@ -247,7 +228,7 @@ class Roles:
                                                    f"{ctx.author.name}#"
                                                    f"{ctx.author.discriminator}"
                                                    )
-                            await ctx.send(f"✅ | Successfully added role"
+                            await ctx.send(f"✅ | Successfully added role "
                                            f"`{roles.name}` to {member.mention}"
                                            "!")
                         else:
