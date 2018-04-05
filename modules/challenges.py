@@ -11,11 +11,6 @@ keyfile = 'data/h0r1zonz-b3fc89528e7d.json'
 credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile, scope)
 
 
-
-
-val = worksheet.acell('B2').value
-
-
 class Challenges:
     """Challenge Approver Module"""
 
