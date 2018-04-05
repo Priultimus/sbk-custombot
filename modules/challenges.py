@@ -10,9 +10,9 @@ keyfile = 'data/h0r1zonz-b3fc89528e7d.json'
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile, scope)
 
-gc = gspread.authorize(credentials)
-sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
-worksheet = sheet.get_worksheet(0)
+
+
+
 val = worksheet.acell('B2').value
 
 
@@ -23,16 +23,14 @@ class Challenges:
     @commands.command()
     async def addpoints(self, ctx, user: discord.Member, pts):
         errored = True
+        gc = gspread.authorize(credentials)
+        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
+        worksheet = sheet.get_worksheet(0)
         try:
             cell = worksheet.find(str(user.id))
             errored = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
-        except gspread.v4.exceptions.APIError:
-            global gc
-            gc = gspread.authorize(credentials)
-            cell = worksheet.find(str(user.id))
-            errored = False
 
         if errored:
             pass
@@ -48,16 +46,15 @@ class Challenges:
     @commands.command()
     async def removepoints(self, ctx, user: discord.Member, pts):
         errored = True
+        gc = gspread.authorize(credentials)
+        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
+        worksheet = sheet.get_worksheet(0)
         try:
             cell = worksheet.find(str(user.id))
             errored = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
-            pass
-        except gspread.v4.exceptions.APIError:
-            gc = gspread.authorize(credentials)
-            cell = worksheet.find(str(user.id))
-            errored = False
+            
         if errored:
             pass
         else:
@@ -73,6 +70,9 @@ class Challenges:
 
     @commands.command()
     async def points(self, ctx, member: discord.Member=None):
+        gc = gspread.authorize(credentials)
+        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
+        worksheet = sheet.get_worksheet(0)
         if member is None:
             member = ctx.author
         a = True
@@ -81,10 +81,7 @@ class Challenges:
             a = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
-        except gspread.v4.exceptions.APIError:
-            gc = gspread.authorize(credentials)
-            cell = worksheet.find(str(user.id))
-            a = False
+            
         if not a:
             values_list = worksheet.row_values(cell.row)
             col_values = worksheet.col_values(cell.col)
