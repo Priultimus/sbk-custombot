@@ -53,8 +53,8 @@ class Developer:
                 continue
         await ctx.send(f"✅ | Successfully backed up channel {channel.mention}!")
 
-    @commands.command(name='eval')
     @Checks.is_owner()
+    @commands.command(name='eval')
     async def _eval(self, ctx, *, body: str):
         """Evaluates code"""
 
