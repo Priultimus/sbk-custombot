@@ -41,17 +41,16 @@ class Developer:
     async def backup(self, ctx, channel:discord.TextChannel, limit=100):
         c = discord.utils.get(ctx.guild.channels, id=channel.id)
         messages = []
-        if limit == 'all':
-            async for elem in c.history():
-                messages.append(elem)
-        else:
-            async for elem in c.history(limit=limit):
-                messages.append(elem)
+        async for elem in c.history(limit=limit):
+            messages.append(elem)
 
         d = discord.utils.get(ctx.bot.guilds, id=402197486317338625)
         cd = await d.create_text_channel(c.name, category=discord.utils.get(d.channels, name='Backup-channels'))
         for m in messages:
-            await cd.send(m.content)
+            try:
+                await cd.send(m.content)
+            except discord.errors.HTTPException:
+                continue
         await ctx.send(f"✅ | Successfully backed up channel {channel.mention}!")
 
     @commands.command(name='eval')
