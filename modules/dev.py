@@ -44,7 +44,7 @@ class Developer:
         if limit == 'all':
             async for elem in c.history():
                 messages.append(elem)
-       else:
+        else:
             async for elem in c.history(limit=limit):
                 messages.append(elem)
 
