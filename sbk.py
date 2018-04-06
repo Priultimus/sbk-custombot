@@ -167,6 +167,8 @@ bot.load_extension(f"modules.roles")
 bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")
+if test:
+    bot.load_extension("modules.levels")
 
 if test:
     print("--- Testing mode active! ----")
