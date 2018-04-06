@@ -27,9 +27,6 @@ class Developer:
         # remove `foo`
         return content.strip('` \n')
 
-    async def __local_check(self, ctx):
-        return await ctx.bot.is_owner(ctx.author)
-
     def get_syntax_error(self, e):
         if e.text is None:
             return f'```py\n{e.__class__.__name__}: {e}\n```'
