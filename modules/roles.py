@@ -188,7 +188,7 @@ class Roles:
             rolename = str(rolename)
             role = discord.utils.get(ctx.guild.roles, name=rolename)
             if role != None:
-                await role.edit(mentionable=True)
+                await role.edit(mentionable=False)
                 await ctx.send(f"✅ | `{rolename}` is no longer mentionable!")
             else:
                 await ctx.send("❌ | I couldn't find that role.")
@@ -202,9 +202,9 @@ class Roles:
         if role is not None:
             await role.edit(mentionable=True)
             apples = await ctx.send(f"<@&{role.id}>")
+            await role.edit(mentionable=False)
             await apples.delete()
             await ctx.message.delete()
-            await role.edit(mentionable=False)
         else:
             await ctx.send("❌ | I couldn't find that role.")
 
