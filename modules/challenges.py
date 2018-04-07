@@ -19,7 +19,7 @@ class Challenges:
     async def addpoints(self, ctx, user: discord.Member, pts):
         errored = True
         gc = gspread.authorize(credentials)
-        sheet = gc.open_by_key('150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w')
+        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
         worksheet = sheet.get_worksheet(0)
         try:
             cell = worksheet.find(str(user.id))
@@ -85,7 +85,7 @@ class Challenges:
     @commands.command()
     async def points(self, ctx, member: discord.Member=None):
         gc = gspread.authorize(credentials)
-        sheet = gc.open_by_key('150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w')
+        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
         worksheet = sheet.get_worksheet(0)
         if member is None:
             member = ctx.author
