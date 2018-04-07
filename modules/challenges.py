@@ -38,7 +38,7 @@ class Challenges:
             values_list = worksheet.row_values(cell.row)
             for r, v in a.items():
                 if newpts >= v:
-                    rr = discord.utils.get(ctx.author.roles, name=r)
+                    rr = discord.utils.get(user.roles, name=r)
                     if rr is None:
                         role = discord.utils.get(ctx.guild.roles, name=r)
                         rolelog = discord.utils.get(ctx.guild.channels,
