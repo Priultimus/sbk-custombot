@@ -313,7 +313,7 @@ class Verification:
                 await member.send("""
                 Hello!\n
 You're in SbK or Sinbad :crossed_swords: Knights!\n
-You should do \`>getcode` in the channel welcome. \#welcome <-- clickable.\n
+You should do \`>getcode` in the channel welcome. <#422736408520687617> <-- clickable.\n
 Then I'll send you some numbers and you can type those in the welcome place!\n
 :D""")
 
