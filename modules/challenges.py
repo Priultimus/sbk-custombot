@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-import gspread
 from __main__ import Checks, DataManager
+import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ['https://spreadsheets.google.com/feeds',
