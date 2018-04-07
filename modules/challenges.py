@@ -49,8 +49,9 @@ class Challenges:
                            f"points to {user.mention}")
             chan = discord.utils.get(ctx.guild.channels,
                                      name='challenge-tracker')
-            await chan.send(f"{ctx.author.mention} added **{pts}** points "
-                            f"to {user.mention}!")
+            if not pts == 0:
+                await chan.send(f"{ctx.author.mention} added **{pts}** points "
+                                f"to {user.mention}!")
 
     @Checks.is_ca()
     @commands.command()
