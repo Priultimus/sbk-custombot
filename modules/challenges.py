@@ -43,7 +43,7 @@ class Challenges:
                         role = discord.utils.get(ctx.guild.roles, name=r)
                         rolelog = discord.utils.get(ctx.guild.channels,
                                                     name='challenge-role-logs')
-                        await ctx.author.add_roles(role)
+                        await user.add_roles(role)
                         await rolelog.send(f"{user.mention} + **{r}** ({newpts} points!)")
             await ctx.send(f"✅ | Successfully added {pts} "
                            f"points to {user.mention}")
