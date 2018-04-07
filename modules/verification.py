@@ -310,12 +310,7 @@ class Verification:
             if not member.guild.id == DataManager.read('data/bot.json')['SERVER']:
                 pass
             else:
-                await member.send("""
-                Hello!\n
-You're in SbK or Sinbad :crossed_swords: Knights!\n
-You should do \`>getcode` in the channel welcome. <#422736408520687617> <-- clickable.\n
-Then I'll send you some numbers and you can type those in the welcome place!\n
-:D""")
+                await member.send("Hello!\nYou're in SbK or Sinbad :crossed_swords: Knights!\nYou should do \`>getcode` in the channel welcome. <#422736408520687617> <-- clickable.\nThen I'll send you some numbers and you can type those in the welcome place!\n:D")
 
                 def find(rolename):
                     for role in member.guild.roles:
