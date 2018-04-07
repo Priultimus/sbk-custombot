@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import gspread
-from __main__ import Checks
+from __main__ import Checks, DataManager
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ['https://spreadsheets.google.com/feeds',
@@ -19,7 +19,7 @@ class Challenges:
     async def addpoints(self, ctx, user: discord.Member, pts):
         errored = True
         gc = gspread.authorize(credentials)
-        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
+        sheet = gc.open_by_key('150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w')
         worksheet = sheet.get_worksheet(0)
         try:
             cell = worksheet.find(str(user.id))
@@ -30,12 +30,27 @@ class Challenges:
         if errored:
             pass
         else:
+            a = DataManager.read('data/challenges.json')
             values_list = worksheet.row_values(cell.row)
             newpts = int(values_list[3]) + int(pts)
             col = int(cell.col) + 2
             worksheet.update_cell(cell.row, col, newpts)
             values_list = worksheet.row_values(cell.row)
-            await ctx.send(f"✅ | Successfully added {pts} points to {user.mention}")
+            for r, v in a.items():
+                if newpts >= v:
+                    rr = discord.utils.get(ctx.author.roles, name=r)
+                    if rr is None:
+                        role = discord.utils.get(ctx.guild.roles, name=r)
+                        rolelog = discord.utils.get(ctx.guild.channels,
+                                                    name='challenge-role-logs')
+                        await ctx.author.add_roles(role)
+                        await rolelog.send(f"{user.mention} + **{r}** ({newpts} points!)")
+            await ctx.send(f"✅ | Successfully added {pts} "
+                           f"points to {user.mention}")
+            chan = discord.utils.get(ctx.guild.channels,
+                                     name='challenge-tracker')
+            await chan.send(f"{ctx.author.mention} added **{pts}** points "
+                            f"to {user.mention}!")
 
     @Checks.is_ca()
     @commands.command()
@@ -49,24 +64,28 @@ class Challenges:
             errored = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
-            
+
         if errored:
             pass
         else:
             values_list = worksheet.row_values(cell.row)
             if int(pts) > int(values_list[3]):
-                await ctx.send(f"❌ | {user.mention} doesn't have that many points!")
+                await ctx.send(f"❌ | {user.mention} "
+                               "doesn't have that many points!")
             else:
                 newpts = int(values_list[3]) - int(pts)
                 col = int(cell.col) + 2
                 worksheet.update_cell(cell.row, col, newpts)
                 values_list = worksheet.row_values(cell.row)
-                await ctx.send(f"✅ | Successfully removed {pts} points from {user.mention}!")
+                await ctx.send(
+                          f"✅ | Successfully removed "
+                          f"{pts} points from {user.mention}!"
+                          )
 
     @commands.command()
     async def points(self, ctx, member: discord.Member=None):
         gc = gspread.authorize(credentials)
-        sheet = gc.open_by_key('1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc')
+        sheet = gc.open_by_key('150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w')
         worksheet = sheet.get_worksheet(0)
         if member is None:
             member = ctx.author
@@ -76,7 +95,7 @@ class Challenges:
             a = False
         except gspread.exceptions.CellNotFound:
             await ctx.send("❌ | I couldn't find that user...")
-            
+
         if not a:
             values_list = worksheet.row_values(cell.row)
             col_values = worksheet.col_values(cell.col)
@@ -84,7 +103,8 @@ class Challenges:
             embed = discord.Embed(color=member.color,
                                   title=f"{member.name}"
                                   f"#{member.discriminator}")
-            embed.add_field(name=f'Ranked {values_list[0]}', value=f'{values_list[5]}', inline=False)
+            embed.add_field(name=f'Ranked {values_list[0]}',
+                            value=f'{values_list[5]}', inline=False)
             val = worksheet.acell('A2').row
             first = worksheet.row_values(val)
             if int(values_list[0]) == 1:
@@ -103,16 +123,17 @@ class Challenges:
                 catch3 = int(variable[3]) - you + 1
                 catch = firsts - you + 1
                 val = f"{catch} points to catch up with {first[2]}(1)"
-                msg = f"{catch3} points to catch up with {variable[2]}({int(values_list[0])-1})"
+                msg = f"{catch3} points to catch up with " \
+                      f"{variable[2]}({int(values_list[0])-1})"
                 valuemsg = val + '\n' + msg
             embed.add_field(
                             name=f"{pts} Points",
                             value=valuemsg,
                             inline=False
                             )
-            embed.add_field(name=f"Points to next rank:", value=f"{values_list[4]}")
+            embed.add_field(name=f"Points to next rank:",
+                            value=f"{values_list[4]}")
             await ctx.send(embed=embed)
-
 
 
 def setup(bot):
