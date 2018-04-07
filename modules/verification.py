@@ -11,7 +11,7 @@ if not test:
     enabled = True
     verifmsg = """**__Verification!__**
 **~** In order to get verified you must do some things!
- 1. Read <#404992099478405122>, because as soon as you're verified you swear under penalty of perjury that you read and agree to these rules.
+ 1. Read <#429314209583726593>, because as soon as you're verified you swear under penalty of perjury that you read and agree to these rules.
  2. Do `>getcode` in order to have <@!421799105854177290> send you a DM! You must have DMs on. If you don't know how to don't worry.
  3. Enter the code Sinbot sent you here! And Sinbot'll verify you.
  4. If you were manually unverified (a staff did `>unverify` to you), you must reread <#404992099478405122> and then ping an online staff member to verify you."""
@@ -313,7 +313,7 @@ class Verification:
                 await member.send("""
                 Hello!\n
 You're in SbK or Sinbad :crossed_swords: Knights!\n
-You should do \`>getcode` in the channel welcome. \#welcome <-- clickable.\n
+You should do \`>getcode` in the channel welcome. <#422736408520687617> <-- clickable.\n
 Then I'll send you some numbers and you can type those in the welcome place!\n
 :D""")
 
