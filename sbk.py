@@ -12,6 +12,9 @@ logging.basicConfig(level=logging.INFO)
 test = True if platform.system() == 'Windows' or \
  sys.argv == ['sbk.py', '-test'] else None
 
+key = "150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w" if test else \
+ "1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc"
+
 
 class DataManager:
     def update(filename, a, b):
