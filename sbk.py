@@ -173,8 +173,7 @@ bot.load_extension("modules.challenges")
 bot.load_extension("modules.help")
 if test:
     bot.load_extension("modules.levels")
-
-
-if test:
     print("--- Testing mode active! ----")
-bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DZmBpg.rFHBcAQlu0z2hVr9AyvRmANUpKQ')
+
+if __name__ == '__main__':
+    bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.Davr_Q.xi9bDPK7vwUeS-JNugUM9c5oNyA')
