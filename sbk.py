@@ -177,4 +177,4 @@ if test:
 
 if test:
     print("--- Testing mode active! ----")
-bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DZmBpg.rFHBcAQlu0z2hVr9AyvRmANUpKQ')
+bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.Davr_Q.xi9bDPK7vwUeS-JNugUM9c5oNyA')
