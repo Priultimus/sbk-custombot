@@ -77,9 +77,9 @@ class Help:
         message = await ctx.send("Pinging...")
         await ctx.trigger_typing()
         ping = (time.monotonic() - before) * 1000
-        await message.edit(content=f"🏓 | My ping is **{ping}ms!**")
-
-
+        ping = round(ping)
+        await message.delete()
+        await ctx.send(f"🏓 | My ping is **{ping}ms!**")
 
 def setup(bot):
     bot.remove_command('help')
