@@ -203,7 +203,6 @@ class Roles:
             await role.edit(mentionable=True)
             apples = await ctx.send(f"<@&{role.id}>")
             await role.edit(mentionable=False)
-            await apples.delete()
             await ctx.message.delete()
         else:
             await ctx.send("❌ | I couldn't find that role.")
