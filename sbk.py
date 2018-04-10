@@ -125,7 +125,7 @@ class Bot(commands.AutoShardedBot):
         if after.guild.id == DataManager.read('data/bot.json')['SERVER']:
                 if after.author.bot:
                     return
-            await self.process_commands(after)
+                await self.process_commands(after)
 
     async def on_command_error(self, ctx, error):
         """The event triggered when an error is raised while invoking a command.
