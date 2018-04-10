@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import time
+import modules
 
 rroles = """
 **>add <@ user or id> <rolename> :** Adds a role to the user.
@@ -80,6 +81,19 @@ class Help:
         ping = round(ping)
         await message.delete()
         await ctx.send(f"🏓 | My ping is **{ping}ms!**")
+      
+   @commands.command(aliases=['suicide'])
+   async def kys(self, ctx, user:discord.Member=None):
+       ownercheck = await ctx.bot.is_owner(user) if user is not None else None
+       ownercheck2 = await ctx.bot.is_owner(ctx.author) if user is None or user == ctx.bot.user else None
+       if ownercheck is not None:
+           await ctx.send(f"no u {ctx.author.mention}")
+       elif ownercheck2 is not None:
+           await ctx.invoke(modules.dev.Developer.restart)
+       else:
+           idfk = random.choice(['murder yourself', 'take your own life', 'end your useless fucking existence', 'die bitch', f"die because {ctx.author.mention} would love it if you died you useless fuck, you're a waste of time and they wish for the end of your useless existence, stop living thanks :)"])
+           await ctx.send(f"{user.mention}, kindly {idfk})
+           await ctx.send(f"(I mean no hard {ctx.author.mention} is very edgy but ily ❤)")
 
 def setup(bot):
     bot.remove_command('help')
