@@ -86,7 +86,7 @@ class Help:
     async def kys(self, ctx, user:discord.Member=None):
         ownercheck = await ctx.bot.is_owner(user) if user is not None else None
         ownercheck2 = await ctx.bot.is_owner(ctx.author) if user is None or user == ctx.bot.user else None
-        if ownercheck is not None:
+        if ownercheck is not None && ownercheck:
             await ctx.send(f"no u {ctx.author.mention}")
         elif ownercheck2 is not None:
             await ctx.invoke(modules.dev.Developer.restart)
