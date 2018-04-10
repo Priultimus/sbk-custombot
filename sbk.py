@@ -114,6 +114,8 @@ class Bot(commands.AutoShardedBot):
         id = message.author.id
         try:
             if message.guild.id == DataManager.read('data/bot.json')['SERVER']:
+                if message.author.bot:
+                    return
                 await self.process_commands(message)
         except AttributeError:
             if id in DataManager.read('data/bot.json')['OWNERS']:
@@ -121,6 +123,8 @@ class Bot(commands.AutoShardedBot):
 
     async def on_message_edit(self, before, after):
         if after.guild.id == DataManager.read('data/bot.json')['SERVER']:
+                if after.author.bot:
+                    return
             await self.process_commands(after)
 
     async def on_command_error(self, ctx, error):
@@ -172,7 +176,6 @@ bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")
 bot.load_extension("modules.help")
 if test:
-    bot.load_extension("modules.levels")
     print("--- Testing mode active! ----")
 
 
