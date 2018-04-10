@@ -92,7 +92,7 @@ class Help:
             await ctx.invoke(modules.dev.Developer.restart)
         else:
             idfk = random.choice(['murder yourself', 'take your own life', 'end your useless fucking existence', 'die bitch', f"die because {ctx.author.mention} would love it if you died you useless fuck, you're a waste of time and they wish for the end of your useless existence, stop living thanks :)"])
-            await ctx.send(f"{user.mention}, kindly {idfk})
+            await ctx.send(f"{user.mention}, kindly {idfk}")
             await ctx.send(f"(I mean no hard {ctx.author.mention} is very edgy but ily ❤)")
 
 def setup(bot):
