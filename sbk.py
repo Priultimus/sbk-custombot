@@ -1,11 +1,19 @@
 import os
 import traceback
 import sys
+import threading
 import json
 import discord
 from discord.ext import commands
 import logging
 import platform
+
+
+def f(f_stop):
+    print("It's been 60 seconds.")
+    if not f_stop.is_set():
+        threading.Timer(60, f, [f_stop]).start()
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -176,8 +184,11 @@ bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")
 bot.load_extension("modules.help")
 if test:
+    bot.load_extension(f"modules.activity")
     print("--- Testing mode active! ----")
 
+f_stop = threading.Event()
+f(f_stop)
 
 if __name__ == '__main__':
     bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.Davr_Q.xi9bDPK7vwUeS-JNugUM9c5oNyA')
