@@ -113,7 +113,8 @@ class Bot(commands.AutoShardedBot):
     async def on_message(self, message):
         id = message.author.id
         try:
-            if message.guild.id == DataManager.read('data/bot.json')['SERVER']:
+            role = discord.utils.get(message.author.roles, name='Staff')
+            if message.guild.id == DataManager.read('data/bot.json')['SERVER'] or role is not None:
                 if message.author.bot:
                     return
                 await self.process_commands(message)
@@ -122,7 +123,7 @@ class Bot(commands.AutoShardedBot):
                 await self.process_commands(message)
 
     async def on_message_edit(self, before, after):
-        if after.guild.id == DataManager.read('data/bot.json')['SERVER']:
+        if after.guild.id == DataManager.read('data/bot.json')['SERVER'] or role is not None:
                 if after.author.bot:
                     return
                 await self.process_commands(after)

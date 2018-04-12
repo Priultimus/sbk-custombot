@@ -67,6 +67,11 @@ class Tracker:
             await ctx.send("No XP!")
 
     @commands.command()
+    async def ignore(self, ctx, channel: discord.TextChannel):
+        DataManager.list_update('data/activity.json', 'ignore-list', channel.id)
+        await ctx.send("Updated ignore list!")
+
+    @commands.command()
     async def leaderboard(self, ctx):
         users = Manager.leaderboard()
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
@@ -109,6 +114,8 @@ class Tracker:
     async def on_message(self, message):
         global last_author
         if message.author.bot:
+            return
+        if message.channel.id in DataManager.read('data/activity.json')['ignore-list']:
             return
         cooldown = datetime.timedelta(minutes=1)
         if message.author == last_author:
