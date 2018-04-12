@@ -123,6 +123,7 @@ class Bot(commands.AutoShardedBot):
                 await self.process_commands(message)
 
     async def on_message_edit(self, before, after):
+        role = discord.utils.get(message.author.roles, name='Staff')
         if after.guild.id == DataManager.read('data/bot.json')['SERVER'] or role is not None:
                 if after.author.bot:
                     return
