@@ -3,6 +3,12 @@ from discord.ext import commands
 import time
 import modules
 
+aactivity = """
+**>xp :** Checks your xp.
+**>leaderboard :** Shows 3 people with most xp.
+**>announce :** Resets xp and shows people with most xp.
+**>ignore <channelname> :** Makes specified channel not gain xp.
+"""
 rroles = """
 **>add <@ user or id> <rolename> :** Adds a role to the user.
 **>remove <@ user or id> <rolename> :** Removes a role from the user.
@@ -55,6 +61,8 @@ def ant_help(ctx):
         embed.add_field(name="__Configuration Commands!__", value=cconfig)
     if staff:
         embed.add_field(name="__Artist Commands!__", value=aart)
+    if staff:
+        embed.add_field(name="__Activity Commands!__", value=aactivity)
     if ca:
         embed.add_field(name="__Point commands!__", value=ppoints)
     if ca is None:
@@ -81,7 +89,7 @@ class Help:
         ping = round(ping)
         await message.delete()
         await ctx.send(f"🏓 | My ping is **{ping}ms!**")
-      
+
     @commands.command(aliases=['suicide'])
     async def kys(self, ctx, user:discord.Member=None):
         ownercheck = await ctx.bot.is_owner(user) if user is not None else None
