@@ -24,19 +24,22 @@ class Manager:
     @log_time_of_use
     def xp_calc(author):
         """Adds the XP to the author."""
+        a = DataManager.read('data/activity.json')['done']
         try:
-            messages = DataManager.read('data/xp.json')[str(author.id)]
-            print(messages)
-            messages += 15
-            DataManager.delete('data/xp.json', author.id)
-            print("Deleted.")
-            DataManager.write('data/xp.json', author.id, messages)
-            print("Written.")
+            if a is False:
+                messages = DataManager.read('data/xp.json')[str(author.id)]
+                messages += 15
+                DataManager.delete('data/xp.json', author.id)
+                DataManager.write('data/xp.json', author.id, messages)
+            else:
+                return None
         except KeyError:
-            print("KeyError.")
-            messages = 15
-            DataManager.write('data/xp.json', author.id, messages)
-            return messages
+            if a is False:
+                messages = 15
+                DataManager.write('data/xp.json', author.id, messages)
+                return messages
+            else:
+                return None
 
     def get_xp(author):
         """Returns the XP of the author. Returns None if not avavilble."""
@@ -72,21 +75,44 @@ class Tracker:
                               color=ctx.author.color)
         for user in users:
             c += 1
-            print(user)
             member = discord.utils.get(sbk.members, id=int(user))
             if not c >= 4:
                 z = Manager.get_xp(member)
-                embed.add_field(name=member.name, value=f"XP: **{z}**")
+                zz = DataManager.read('data/activity.json')['last-week']
+                if zz and user in zz:
+                    embed.add_field(name=member.name, value=f"XP: **{z}**🔥")
+                else:
+                    embed.add_field(name=member.name, value=f"XP: **{z}**")
+
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def announce(self, ctx):
+        DataManager.delete('data/activity.json', 'done')
+        DataManager.write('data/activity.json', 'done', False)
+        users = Manager.leaderboard()
+        sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
+        c = 0
+        embed = discord.Embed(title='And here are the final results!',
+                              color=ctx.author.color)
+        for user in users:
+            c += 1
+            member = discord.utils.get(sbk.members, id=int(user))
+            if not c >= 11:
+                z = Manager.get_xp(member)
+                embed.add_field(name=f"{c}." + member.name,
+                                value=f"XP: **{z}**",
+                                inline=False)
+        await ctx.send(embed=embed)
+        await ctx.send("Remember, only the top three get a custom!")
 
     async def on_message(self, message):
         global last_author
-        cooldown = datetime.timedelta(seconds=30)
-        print("Message: " + str(message.author.id))
-        print((time.now() - Manager.xp_calc._last_use_time) >= cooldown)
+        if message.author.bot:
+            return
+        cooldown = datetime.timedelta(minutes=1)
         if message.author == last_author:
             if (time.now() - Manager.xp_calc._last_use_time) >= cooldown:
-                print("Writing!")
                 Manager.xp_calc(message.author)
                 last_author = message.author
         else:
