@@ -34,14 +34,17 @@ class Manager:
                 DataManager.delete('data/xp.json', author.id)
                 DataManager.write('data/xp.json', author.id, messages)
                 last_author[author.id] = 60
-                asyncio.sleep(60)
+                await asyncio.sleep(60)
                 last_author[author.id] = 0
             else:
                 return None
         except KeyError:
             if a is False:
+                last_author[author.id] = 60
                 messages = 15
                 DataManager.write('data/xp.json', author.id, messages)
+                asyncio.sleep(60)
+                last_author[author.id] = 0
                 return messages
             else:
                 return None
