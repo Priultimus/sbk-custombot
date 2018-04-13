@@ -5,8 +5,9 @@ import discord
 import datetime
 from datetime import datetime as time
 from functools import wraps
+import asyncio
 
-last_author = None
+last_author = {}
 
 
 class Manager:
@@ -22,15 +23,19 @@ class Manager:
         return callback
 
     @log_time_of_use
-    def xp_calc(author):
+    async def xp_calc(author):
         """Adds the XP to the author."""
         a = DataManager.read('data/activity.json')['done']
         try:
-            if a is False:
+            global last_author
+            if a is False and last_author[author.id] == 0:
                 messages = DataManager.read('data/xp.json')[str(author.id)]
                 messages += 15
                 DataManager.delete('data/xp.json', author.id)
                 DataManager.write('data/xp.json', author.id, messages)
+                last_author[author.id] = 60
+                asyncio.sleep(60)
+                last_author[author.id] = 0
             else:
                 return None
         except KeyError:
@@ -112,7 +117,6 @@ class Tracker:
         await ctx.send("Remember, only the top three get a custom!")
 
     async def on_message(self, message):
-        global last_author
         if message.author.bot:
             return
         if message.channel.id in DataManager.read('data/activity.json')['ignore-list']:
@@ -120,11 +124,11 @@ class Tracker:
         cooldown = datetime.timedelta(minutes=1)
         if message.author == last_author:
             if (time.now() - Manager.xp_calc._last_use_time) >= cooldown:
-                Manager.xp_calc(message.author)
-                last_author = message.author
+                await Manager.xp_calc(message.author)
+            else:
+                return
         else:
-            Manager.xp_calc(message.author)
-            last_author = message.author
+            await Manager.xp_calc(message.author)
 
 
 def setup(bot):
