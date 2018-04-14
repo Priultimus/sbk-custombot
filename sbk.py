@@ -286,7 +286,7 @@ class Bot(commands.AutoShardedBot):
 
 
 if test:
-    bot = Bot(command_prefix="<@421799105854177290> ", owner_id=286246724270555136)
+    bot = Bot(command_prefix=">>", owner_id=286246724270555136)
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136)
 
