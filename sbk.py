@@ -2,7 +2,9 @@ import os
 import traceback
 import sys
 import json
+from pymongo import MongoClient
 import discord
+import threading
 from discord.ext import commands
 import logging
 import platform
@@ -15,8 +17,109 @@ test = True if platform.system() == 'Windows' or \
 key = "150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w" if test else \
  "1UHXrqeaapyCXv-xJV7YmA9r5c_6tjjS9t_55YJhIFVc"
 
+try:
+    uri = '127.0.0.1'
+    client = MongoClient(uri)
+    dbs = client['Sinbot']
+except:
+    print("Cannot connect to MongoDB, DataManager.db will NOT be supported.")
+
+
+class collections():
+    attrs = dbs.collection_names()
+    for attr in attrs:
+        value = getattr(dbs, attr)
+        locals()[attr] = value
+
 
 class DataManager:
+
+    class db():
+        """Database class.
+        Currently supports only certain data inputs.
+        """
+        def __init__(self):
+            threading.Thread.__init__(self)
+
+        def insert(types, db, key=None, value=None, **kwargs):
+            """Insert a document into the mongodb collection of your choosing.
+            :param types: The type of document you are trying to insert. Currently supported is str, int, array and object.
+            :param db: The collection in which you choose. Currently supported is guilds, settings and eco.
+            :param key: A paramater only used in object.
+            :param value: Also only used in object.
+            :param kwargs: The name of the document you choose to insert. Like name="name-of-document" or home="way-to-home."
+            """
+
+            if types == "str":
+                for k, v in kwargs.items():
+                    str(k)
+                    str(v)
+                    for collection in collections.__dict__['attrs']:
+                        if db == collection:
+                            return(collections.__dict__[db].insert_one({k: v}))
+                        else:
+                            continue
+                    return('The db paramater isn\'t any collection in the database!')
+
+            elif types == "int":
+                for k, v in kwargs.items():
+                    str(k)
+                    int(v)
+                    for collection in collections.__dict__['attrs']:
+                        if db == collection:
+                            return(collections.__dict__[db].insert_one({k: v}))
+                        else:
+                            continue
+                return('The db paramater isn\'t any collection in the database!')
+
+            elif types == "array":
+                for k, v in kwargs.items():
+                    if isinstance(v, list):
+                        for collection in collections.__dict__['attrs']:
+                            if db == collection:
+                                return(collections.__dict__[db].insert_one({k: v}))
+                            else:
+                                continue
+                        return('The db paramater isn\'t any collection in the database!')
+                    else:
+                        arr = []
+                        arr.append(v)
+                        for collection in collections.__dict__['attrs']:
+                            if db == collection:
+                                return(collections.__dict__[db].insert_one({k: arr}))
+                            else:
+                                continue
+                        return('The db paramater isn\'t any collection in the database!')
+
+            elif types == "object":
+                for k, v in kwargs.items():
+
+                    for collection in collections.__dict__['attrs']:
+                        if db == collection:
+                            return(collections.__dict__[db].insert_one({k: create_object(key, value)}))
+                        else:
+                            continue
+                    return('The db paramater isn\'t any collection in the database!')
+
+            else:
+                return("Oops, that's not a type.")
+
+        def find(db, name):
+            for collection in collections.__dict__['attrs']:
+                if db == collection:
+                    return(collections.__dict__[db].find_one({'name': name}))
+                else:
+                    continue
+            return('The db paramater isn\'t any collection in the database!')
+
+        def delete(db, name):
+            for collection in collections.__dict__['attrs']:
+                if db == collection:
+                    return(collections.__dict__[db].delete_one({'name': name}))
+                else:
+                    continue
+            return("The db paramater isn't any collection in the database!")
+
     def update(filename, a, b):
         with open(filename, "r") as jsonFile:
             data = json.load(jsonFile)
@@ -98,7 +201,9 @@ class Bot(commands.AutoShardedBot):
     def restart(self):
 
         """Restarts the current program.
+
         Note: this function does not return. Any cleanup action (like
+
         saving data) must be done before calling this function."""
 
         python = sys.executable
@@ -109,20 +214,36 @@ class Bot(commands.AutoShardedBot):
         print("Ready!")
 
     async def on_message(self, message):
-        id = message.author.id
-        try:
-            role = discord.utils.get(message.author.roles, name='Staff')
-            if message.guild.id == DataManager.read('data/bot.json')['SERVER'] or role is not None:
-                if message.author.bot:
-                    return
+        after = message
+        x = DataManager.read('data/bot.json')['OWNERS']
+        y = DataManager.read('data/bot.json')['SERVER']
+        if not message.guild:
+            if message.author.id in x:
                 await self.process_commands(message)
-        except AttributeError:
-            if id in DataManager.read('data/bot.json')['OWNERS']:
-                await self.process_commands(message)
+            print(f"{str(message.author)}: {message.content}")
+            return
+        else:
+            try:
+                role = discord.utils.get(after.author.roles, name='Sinbot fan club')
+                s = discord.utils.get(after.author.roles, name='Staff')
+            except AttributeError:
+                return
+
+            if (after.guild.id == y) or (role is not None) or (s is not None):
+                    if after.author.bot:
+                        return
+                    else:
+                        await self.process_commands(after)
 
     async def on_message_edit(self, before, after):
-        role = discord.utils.get(after.author.roles, name='Staff')
-        if after.guild.id == DataManager.read('data/bot.json')['SERVER'] or role is not None:
+        role = discord.utils.get(after.author.roles, name='Sinbot fan club')
+        s = discord.utils.get(after.author.roles, name='Staff')
+        x = DataManager.read('data/bot.json')['OWNERS']
+        y = DataManager.read('data/bot.json')['SERVER']
+        if (not after.guild) and (after.author.id not in x):
+            return
+
+        elif (after.guild.id == y) or (role is not None) or (s is not None):
                 if after.author.bot:
                     return
                 await self.process_commands(after)
@@ -165,7 +286,7 @@ class Bot(commands.AutoShardedBot):
 
 
 if test:
-    bot = Bot(command_prefix=">>", owner_id=286246724270555136)
+    bot = Bot(command_prefix="<@421799105854177290> ", owner_id=286246724270555136)
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136)
 

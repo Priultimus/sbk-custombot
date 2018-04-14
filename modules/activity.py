@@ -2,7 +2,6 @@ from discord.ext import commands
 from __main__ import DataManager
 import discord
 # import time as t
-import datetime
 from datetime import datetime as time
 from functools import wraps
 import asyncio
@@ -98,7 +97,7 @@ class Tracker:
                 z = Manager.get_xp(member)
                 zz = DataManager.read('data/activity.json')['last-week']
                 if zz and user in zz:
-                    embed.add_field(name=member.name, value=f"XP: **{z}**🔥")
+                    embed.add_field(name=member.name, value=f"🔥 XP: **{z}**")
                 else:
                     embed.add_field(name=member.name, value=f"XP: **{z}**")
 
@@ -107,34 +106,28 @@ class Tracker:
     @commands.command()
     async def announce(self, ctx):
         DataManager.delete('data/activity.json', 'done')
+        DataManager.write('data/activity.json', 'timeleft', 604800)
         DataManager.write('data/activity.json', 'done', False)
-        users = Manager.leaderboard()
+        users = DataManager.read('data/activity.json')['last-week']
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
         c = 0
         embed = discord.Embed(title='And here are the final results!',
                               color=ctx.author.color)
-        for user in users:
+        for user, points in users.items():
             c += 1
             member = discord.utils.get(sbk.members, id=int(user))
-            if not c >= 11:
-                z = Manager.get_xp(member)
+            if not c >= 4:
                 embed.add_field(name=f"{c}." + member.name,
-                                value=f"XP: **{z}**",
+                                value=f"XP: **{points}**",
                                 inline=False)
         await ctx.send(embed=embed)
-        await ctx.send("Remember, only the top three get a custom!")
+        # await ctx.send("Remember, only the top three get a custom!")
 
     async def on_message(self, message):
         if message.author.bot:
             return
         if message.channel.id in DataManager.read('data/activity.json')['ignore-list']:
             return
-        cooldown = datetime.timedelta(minutes=1)
-        if message.author == last_author:
-            if (time.now() - Manager.xp_calc._last_use_time) >= cooldown:
-                await Manager.xp_calc(message.author)
-            else:
-                return
         else:
             await Manager.xp_calc(message.author)
 

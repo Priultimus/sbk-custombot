@@ -41,13 +41,24 @@ def f(f_stop):
     a = DataManager.read('data/activity.json')['timeleft']
     a = int(a)
     b = DataManager.read('data/xp.json')
+    e = {}
     if a == 0:
-        for k, v in b.items():
-            x = DataManager.read('data/xp.json')
-            y = sorted(x, key=x.get, reverse=True)
-            DataManager.write('data/activity.json', 'last-week', y)
+        x = DataManager.read('data/xp.json')
+        organized = sorted(x, key=x.get, reverse=True)
+        c = 0
+        for d in organized:  # Forloop to cache xp.json
+            c += 1
+            if not c >= 4:
+                e[d] = DataManager.read('data/xp.json')[str(d)]
+            else:
+                break
+
+        for k in b:   # forloop to empty xp.json
             DataManager.delete('data/xp.json', k)
-            DataManager.write('data/activity.json', 'done', True)
+
+        DataManager.write('data/activity.json', 'last-week', e)
+        print("set to e")
+        DataManager.write('data/activity.json', 'done', True)
     else:
         DataManager.delete('data/activity.json', 'timeleft')
         DataManager.write('data/activity.json', 'timeleft', a - 60)
