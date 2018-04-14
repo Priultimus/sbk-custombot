@@ -184,4 +184,4 @@ if test:
 
 
 if __name__ == '__main__':
-    bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.Davr_Q.xi9bDPK7vwUeS-JNugUM9c5oNyA')
+    bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DbOkLQ.RSly_UvQGU8zrhofWN8gC6EBx6U')
