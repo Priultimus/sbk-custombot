@@ -14,8 +14,7 @@ class Movie:
 
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
-            DataManager.list_update('data/movie.json', 'author', message.author)
-            DataManager.list_update('data/movie.json', 'suggestion', message.content)
+            DataManager.write('data/movie.json', message.author.id, message.content)
 
 
 def setup(bot):
