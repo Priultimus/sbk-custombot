@@ -8,10 +8,9 @@ class Movie:
     @Checks.is_staff()
     @commands.command()
     async def movielist(self, ctx):
+        embed = discord.Embed(color=ctx.author.color)
         for author, suggestion in DataManager.read('data/movies.json').items():
-            author = discord.utils.get(ctx.guild.members, id=int(author))
-            embed = discord.Embed(color=ctx.author.color)
-            embed.add_field(name=str(author.name), value=str(suggestion), inline=False)
+            embed.add_field(name=str(author), value=str(suggestion), inline=False)
         await ctx.send(embed=embed)
 
     async def on_message(self, message):
