@@ -9,8 +9,9 @@ class Movie:
     @Checks.is_staff()
     @commands.command()
     async def movielist(self, ctx):
-        for author, suggestion in DataManager.read('data/movie.json')[str('movielist')].items():
-            embed.add_field(name=str(author), value=str(suggestion), inline=False)
+        for author, suggestion in DataManager.read('data/movie.json').items():
+            author = discord.utils.get(ctx.guild.members, id=author)
+            embed.add_field(name=str(author.name), value=str(suggestion), inline=False)
         await ctx.send(embed=embed)
 
 
