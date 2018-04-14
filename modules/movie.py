@@ -3,7 +3,6 @@ from discord.ext import commands
 from __main__ import DataManager, Checks
 
 
-
 class Movie:
 
     @Checks.is_staff()
@@ -15,7 +14,6 @@ class Movie:
             embed.add_field(name=str(author.name), value=str(suggestion), inline=False)
         await ctx.send(embed=embed)
 
-
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
             DataManager.list_update('data/movies.json', 'author', str(message.author.name))
@@ -23,4 +21,4 @@ class Movie:
 
 def setup(bot):
     bot.add_cog(Movie())
-print("Loaded Movie.")
+    print("Loaded Movie.")
