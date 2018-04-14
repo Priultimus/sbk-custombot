@@ -10,7 +10,7 @@ class Movie:
     @commands.command()
     async def movielist(self, ctx):
         for author, suggestion in DataManager.read('data/movie.json')['movielist'].items():
-            author = discord.utils.get(ctx.guild.members, id=author)
+            author = discord.utils.get(ctx.guild.members, id=int(author))
             embed = discord.Embed(color=ctx.author.color)
             embed.add_field(name=str(author.name), value=str(suggestion), inline=False)
         await ctx.send(embed=embed)
