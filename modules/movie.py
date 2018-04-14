@@ -17,7 +17,7 @@ class Movie:
 
     async def on_message(self, message):
         if message.channel.id == "426487069351608330":
-            DataManager.list_update('data/movie.json', 'movies', message.content)
+            DataManager.list_update('data/movie.json', 'movies', message.message.content)
 
 
 def setup(bot):
