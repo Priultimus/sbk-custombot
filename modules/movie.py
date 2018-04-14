@@ -8,16 +8,14 @@ class Movie:
     @Checks.is_staff()
     @commands.command()
     async def movielist(self, ctx):
-        a = DataManager.read('data/movie.json')[str('movielist')]
-        embed = discord.Embed(color=ctx.author.color)
-        for a in a:
-            embed.add_field(name=str('\u200B'), value=str(a))
+        for author, suggestion in DataManager.read('data/movie.json')[str('movielist')].items():
+            embed.add_field(name=str(author), value=str(suggestion), inline=False)
         await ctx.send(embed=embed)
-
 
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
-            DataManager.list_update('data/movie.json', 'movielist', message.content)
+            DataManager.list_update('data/movie.json', 'author', message.author)
+            DataManager.list_update('data/movie.json', 'suggestion', message.content)
 
 
 def setup(bot):
