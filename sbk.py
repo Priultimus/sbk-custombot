@@ -98,9 +98,7 @@ class Bot(commands.AutoShardedBot):
     def restart(self):
 
         """Restarts the current program.
-
         Note: this function does not return. Any cleanup action (like
-
         saving data) must be done before calling this function."""
 
         python = sys.executable
@@ -177,11 +175,11 @@ bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")
 bot.load_extension("modules.help")
-bot.load_extenstion("modules.movie")
+bot.load_extension("modules.movie")
 if test:
     bot.load_extension(f"modules.activity")
     print("--- Testing mode active! ----")
 
 
 if __name__ == '__main__':
-    bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.Davr_Q.xi9bDPK7vwUeS-JNugUM9c5oNyA')
+    bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DbOkLQ.RSly_UvQGU8zrhofWN8gC6EBx6U')
