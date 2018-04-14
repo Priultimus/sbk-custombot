@@ -10,7 +10,7 @@ class Movie:
     async def movielist(self, ctx):
         embed = discord.Embed(color=ctx.author.color)
         for author, suggestion in DataManager.read('data/movies.json').items():
-            embed.add_field(name=str(author), value=str(suggestion), inline=False)
+            embed.add_field(name=author, value=suggestion, inline=False)
         await ctx.send(embed=embed)
 
     async def on_message(self, message):
