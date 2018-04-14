@@ -17,7 +17,10 @@ class Movie:
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
             DataManager.write('data/movie.json', message.author.id, message.content)
+<<<<<<< HEAD
 
+=======
+>>>>>>> f2cdebb3a2415c9ce63c32c279747d6f8f39af37
 
 
 def setup(bot):
