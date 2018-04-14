@@ -13,7 +13,6 @@ class Movie:
             embed.add_field(name=author, value=suggestion, inline=False)
         await ctx.send(embed=embed)
 
-
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
             DataManager.list_update('data/movies.json', 'author', str(message.author.name))
