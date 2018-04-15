@@ -15,8 +15,7 @@ class Movie:
 
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
-            DataManager.list_update('data/movies.json', 'author', str(message.author.name))
-            DataManager.list_update('data/movies.json', 'suggestion', str(message.content))
+            DataManager.write('data/movie.json', message.author.id, message.content)
 
 def setup(bot):
     bot.add_cog(Movie())
