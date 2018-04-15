@@ -72,9 +72,9 @@ class Tracker:
             user = ctx.author
         if Manager.get_xp(user.id) is not None:
             if not user == ctx.author:
-                await ctx.send(f"✅ | {user.mention}'s XP is: **{Manager.get_xp(user)}!**")
+                await ctx.send(f"✅ | {user.mention}'s XP is: **{Manager.get_xp(user.id)}!**")
             else:
-                await ctx.send(f"✅ | Your XP is: **{Manager.get_xp(user)}!**")
+                await ctx.send(f"✅ | Your XP is: **{Manager.get_xp(user.id)}!**")
         else:
             await ctx.send("❌ | No XP!")
 
