@@ -70,7 +70,7 @@ class Tracker:
         """Gets the XP of a user."""
         if user is None:
             user = ctx.author
-        if Manager.get_xp(user) is not None:
+        if Manager.get_xp(user.id) is not None:
             if not user == ctx.author:
                 await ctx.send(f"✅ | {user.mention}'s XP is: **{Manager.get_xp(user)}!**")
             else:
