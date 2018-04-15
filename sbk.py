@@ -236,8 +236,11 @@ class Bot(commands.AutoShardedBot):
                         await self.process_commands(after)
 
     async def on_message_edit(self, before, after):
-        role = discord.utils.get(after.author.roles, name='Sinbot fan club')
-        s = discord.utils.get(after.author.roles, name='Staff')
+        try:
+            role = discord.utils.get(after.author.roles, name='Sinbot fan club')
+            s = discord.utils.get(after.author.roles, name='Staff')
+        except AttributeError:
+            return
         x = DataManager.read('data/bot.json')['OWNERS']
         y = DataManager.read('data/bot.json')['SERVER']
         if (not after.guild) and (after.author.id not in x):
