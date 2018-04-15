@@ -93,7 +93,9 @@ class Tracker:
                               color=ctx.author.color)
         for user in users:
             c += 1
+            print(sbk)
             member = discord.utils.get(sbk.members, id=int(user))
+            print(member)
             if not c >= 4:
                 z = Manager.get_xp(user)
                 zz = DataManager.read('data/activity.json')['last-week']
