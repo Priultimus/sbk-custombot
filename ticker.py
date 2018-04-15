@@ -62,7 +62,7 @@ def f(f_stop):
     else:
         DataManager.delete('data/activity.json', 'timeleft')
         DataManager.write('data/activity.json', 'timeleft', a - 60)
-        print("")
+        print("Written.")
     if not f_stop.is_set():
         threading.Timer(60, f, [f_stop]).start()
 
