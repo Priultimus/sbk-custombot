@@ -137,6 +137,8 @@ class DataManager:
     def list_update(filename, a, b):
         with open(filename, "r") as jsonFile:
             data = json.load(jsonFile)
+        if isinstance(a, int):
+            a = str(a)
         data[a].append(b)
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)

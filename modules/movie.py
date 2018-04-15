@@ -15,7 +15,11 @@ class Movie:
 
     async def on_message(self, message):
         if message.channel.id == 426487069351608330:
-            DataManager.write('data/movies.json', message.author.id, message.content)
+            try:
+                DataManager.list_update('data/movies.json', message.author.id, message.content)
+            except KeyError:
+                DataManager.write('data/movies.json', message.author.id, [])
+                DataManager.list_update('data/movies.json', message.author.id, message.content)
 
 def setup(bot):
     bot.add_cog(Movie())
