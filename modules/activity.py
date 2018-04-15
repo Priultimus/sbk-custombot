@@ -65,7 +65,7 @@ class Manager:
 class Tracker:
     """Activity tracking system."""
 
-    @commands.command()
+    @commands.command(aliases=['rank', 'exp'])
     async def xp(self, ctx, user: discord.Member=None):
         """Gets the XP of a user."""
         if user is None:
@@ -84,7 +84,7 @@ class Tracker:
         DataManager.list_update('data/activity.json', 'ignore-list', channel.id)
         await ctx.send("Updated ignore list!")
 
-    @commands.command()
+    @commands.command(aliases=['lb', 'levels'])
     async def leaderboard(self, ctx):
         users = Manager.leaderboard()
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
