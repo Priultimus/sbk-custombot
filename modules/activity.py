@@ -1,5 +1,5 @@
 from discord.ext import commands
-from __main__ import DataManager
+from __main__ import DataManager, Checks
 import discord
 # import time as t
 from datetime import datetime as time
@@ -51,7 +51,7 @@ class Manager:
     def get_xp(author):
         """Returns the XP of the author. Returns None if not avavilble."""
         try:
-            xp = DataManager.read('data/xp.json')[str(author.id)]
+            xp = DataManager.read('data/xp.json')[str(author)]
             return xp
         except KeyError:
             return None
@@ -78,6 +78,7 @@ class Tracker:
         else:
             await ctx.send("❌ | No XP!")
 
+    @Checks.is_staff()
     @commands.command()
     async def ignore(self, ctx, channel: discord.TextChannel):
         DataManager.list_update('data/activity.json', 'ignore-list', channel.id)
@@ -94,7 +95,7 @@ class Tracker:
             c += 1
             member = discord.utils.get(sbk.members, id=int(user))
             if not c >= 4:
-                z = Manager.get_xp(member)
+                z = Manager.get_xp(user)
                 zz = DataManager.read('data/activity.json')['last-week']
                 if zz and user in zz:
                     embed.add_field(name=member.name, value=f"🔥 XP: **{z}**")
@@ -104,6 +105,7 @@ class Tracker:
         await ctx.send(embed=embed)
 
     @commands.command()
+    @Checks.is_staff()
     async def announce(self, ctx):
         DataManager.delete('data/activity.json', 'done')
         DataManager.write('data/activity.json', 'timeleft', 604800)
