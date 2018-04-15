@@ -99,10 +99,13 @@ class Tracker:
             if not c >= 4:
                 z = Manager.get_xp(user)
                 zz = DataManager.read('data/activity.json')['last-week']
-                if zz and user in zz:
-                    embed.add_field(name=member.name, value=f"🔥 XP: **{z}**")
+                if member is not None:
+                    if zz and user in zz:
+                        embed.add_field(name=member.name, value=f"🔥 XP: **{z}**")
+                    else:
+                        embed.add_field(name=member.name, value=f"XP: **{z}**")
                 else:
-                    embed.add_field(name=member.name, value=f"XP: **{z}**")
+                    continue
 
         await ctx.send(embed=embed)
 
