@@ -152,7 +152,7 @@ class DataManager:
         del data[str(a)]
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)
-    print(f"INFO:sbk.DataManager: Deleted {a}")
+        print(f"INFO:sbk.DataManager: Deleted {a}")
 
     def read(filename):
         with open(filename) as f:
