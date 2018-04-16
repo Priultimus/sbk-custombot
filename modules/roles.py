@@ -70,8 +70,8 @@ class Roles:
                 await ctx.send("❌ | An error has occured.")
 
     @commands.group(name='artblacklist')
-    @commands.has_any_role("Staff")
-    async def _artblacklist(self, ctx, number=10):
+    @Checks.is_staff()
+    async def artblacklist(self, ctx, number=10):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(color=ctx.author.color)
             i = 0
@@ -116,8 +116,8 @@ class Roles:
                 await ctx.send("❌ | Nobody is blacklisted!")
                 raise e
 
-    @_artblacklist.command(aliases=['add'])
-    @commands.has_any_role('Staff')
+    @artblacklist.command(aliases=['add'])
+    @Checks.is_staff()
     async def addblacklist(self, ctx, member: discord.Member, *reason):
         if reason:
             reason = ' '.join(reason)
@@ -153,8 +153,8 @@ class Roles:
         else:
             await ctx.send("❌ | That user is already blacklisted!")
 
-    @_artblacklist.command(aliases=['remove'])
-    @commands.has_any_role("Staff")
+    @artblacklist.command(aliases=['remove'])
+    @Checks.is_staff()
     async def removeblacklist(self, ctx, member: discord.Member, reason=None):
         if str(member.id) in DataManager.read('data/artblacklist.json'):
             DataManager.delete('data/artblacklist', member.id)
