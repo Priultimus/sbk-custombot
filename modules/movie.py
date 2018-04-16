@@ -20,7 +20,7 @@ class Movie:
         try:
             DataManager.write('data/movies.json', 'channel', channel.id)
             await ctx.send(f"✅ | Set the Movies channel to `{channel}`!")
-        else:
+        except Exception:
             await ctx.send(f"❌ | An error has occured.")
 
 
