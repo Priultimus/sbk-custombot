@@ -126,6 +126,7 @@ class DataManager:
         data[a] = b
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)
+        print(f"INFO:sbk.DataManager: Written {b} to {a}")
 
     def write(filename, a, b):
         with open(filename, "r") as jsonFile:
@@ -133,6 +134,7 @@ class DataManager:
         data[a] = b
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)
+        print(f"INFO:sbk.DataManager: Written {b} to {a}")
 
     def list_update(filename, a, b):
         with open(filename, "r") as jsonFile:
@@ -142,6 +144,7 @@ class DataManager:
         data[a].append(b)
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)
+        print(f"INFO:sbk.DataManager: Written {b} to {a} as a list")
 
     def delete(filename, a):
         with open(filename, "r") as jsonFile:
@@ -149,11 +152,13 @@ class DataManager:
         del data[str(a)]
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)
+    print(f"INFO:sbk.DataManager: Deleted {a}")
 
     def read(filename):
         with open(filename) as f:
             stuff = json.load(f)
         return stuff
+   print(f"INFO:sbk.DataManager: Read {filename}")
 
 
 if sys.argv == ['sbk.py', '-test']:
