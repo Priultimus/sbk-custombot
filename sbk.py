@@ -306,9 +306,9 @@ bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")
 bot.load_extension("modules.help")
-bot.load_extension("modules.movie")
+bot.load_extension("modules.activity")
 if test:
-    bot.load_extension(f"modules.activity")
+    bot.load_extension("modules.movie")
     print("--- Testing mode active! ----")
 
 
