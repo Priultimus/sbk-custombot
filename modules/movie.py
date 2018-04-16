@@ -13,8 +13,21 @@ class Movie:
             embed.add_field(name=author, value=suggestion, inline=False)
         await ctx.send(embed=embed)
 
+
+    @Checks.is_staff()
+    @commands.command()
+    async def moviechannel(self, ctx, channel: discord.Channel):
+        try:
+            DataManager.write('data/movies.json', 'channel', channel.id)
+            await ctx.send(f"✅ | Set the Movies channel to `{channel}`!")
+        else:
+            await ctx.send(f"❌ | An error has occured.")
+
+
+
     async def on_message(self, message):
-        if message.channel.id == 426487069351608330:
+        channel = DataManager.read('data/movies.json')[str('channel')]
+        if message.channel.id == channel:
             try:
                 DataManager.list_update('data/movies.json', message.author.id, message.content)
             except KeyError:
