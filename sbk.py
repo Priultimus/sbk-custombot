@@ -158,7 +158,7 @@ class DataManager:
         with open(filename) as f:
             stuff = json.load(f)
         return stuff
-   print(f"INFO:sbk.DataManager: Read {filename}")
+        print(f"INFO:sbk.DataManager: Read {filename}")
 
 
 if sys.argv == ['sbk.py', '-test']:
