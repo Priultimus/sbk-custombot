@@ -16,12 +16,9 @@ class Movie:
 
     @Checks.is_staff()
     @commands.command()
-    async def moviechannel(self, ctx, channel: discord.TextChannel):
-        try:
-            DataManager.write('data/movies.json', 'channel', channel.id)
-            await ctx.send(f"✅ | Set the Movies channel to `{channel}`!")
-        except Exception:
-            await ctx.send(f"❌ | An error has occured.")
+    async def moviechannel(self, ctx, channel: discord.Channel):
+        DataManager.write('data/movies.json', 'channel', channel.id)
+        await ctx.send(f"✅ | Set the Movies channel to `{channel}`!")
 
 
 
