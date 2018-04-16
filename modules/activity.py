@@ -25,8 +25,12 @@ class Manager:
     async def xp_calc(author):
         """Adds the XP to the author."""
         a = DataManager.read('data/activity.json')['done']
+        global last_author
         try:
-            global last_author
+            last_author[author.id]
+        except KeyError:
+            last_author[author.id] = 0
+        try:
             if a is False and last_author[author.id] == 0:
                 messages = DataManager.read('data/xp.json')[str(author.id)]
                 messages += 15
