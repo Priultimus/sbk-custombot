@@ -61,8 +61,6 @@ def ant_help(ctx):
     if staff or ca:
         embed.add_field(name="__Role Commands!__", value=rroles)
     if staff:
-        embed.add_field(name="__Verification commands!__", value=vverif)
-    if staff:
         embed.add_field(name="__Configuration Commands!__", value=cconfig)
     if staff:
         embed.add_field(name="__Artist Commands!__", value=aart)
