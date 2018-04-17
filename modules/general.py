@@ -61,8 +61,6 @@ def ant_help(ctx):
     if staff or ca:
         embed.add_field(name="__Role Commands!__", value=rroles)
     if staff:
-        embed.add_field(name="__Verification commands!__", value=vverif)
-    if staff:
         embed.add_field(name="__Configuration Commands!__", value=cconfig)
     if staff:
         embed.add_field(name="__Artist Commands!__", value=aart)
@@ -97,18 +95,8 @@ class Help:
         await message.delete()
         await ctx.send(f"🏓 | My ping is **{ping}ms!**")
 
-    @commands.command(aliases=['suicide'])
-    async def kys(self, ctx, user:discord.Member=None):
-        ownercheck = await ctx.bot.is_owner(user) if user is not None else None
-        ownercheck2 = await ctx.bot.is_owner(ctx.author) if user is None or user == ctx.bot.user else None
-        if ownercheck is not None and ownercheck:
-            await ctx.send(f"no u {ctx.author.mention}")
-        elif ownercheck2 is not None:
-            await ctx.invoke(modules.dev.Developer.restart)
-        else:
-            idfk = random.choice(['murder yourself', 'take your own life', 'end your useless fucking existence', 'die bitch', f"die because {ctx.author.mention} would love it if you died you useless fuck, you're a waste of time and they wish for the end of your useless existence, stop living thanks :)"])
-            await ctx.send(f"{user.mention}, kindly {idfk}")
-            await ctx.send(f"(I mean no hard {ctx.author.mention} is very edgy but ily ❤)")
+    async def on_member_join(self, member):
+        sbk = 
 
 def setup(bot):
     bot.remove_command('help')
