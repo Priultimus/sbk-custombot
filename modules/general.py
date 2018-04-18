@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import time
 import modules
+from __main__ import mainsbk, testsbk, test, DataManager
 
 aactivity = """
 **>xp :** Checks your xp.
@@ -96,7 +97,13 @@ class Help:
         await ctx.send(f"🏓 | My ping is **{ping}ms!**")
 
     async def on_member_join(self, member):
-        sbk = 
+        if test:
+            channel = discord.utils.get(testsbk, id=431944465532321802)
+        else:
+            channel = discord.utils.get(mainsbk, id=257895860757725186)
+        message = DataManager.read('data/general.json')['welcome']
+        await channel.send(message + f"{member.mention}!")
+
 
 def setup(bot):
     bot.remove_command('help')
