@@ -65,5 +65,5 @@ class Voting:
 
 
 def setup(bot):
-    bot.add_cog(VoteReact())
+    bot.add_cog(Voting())
     print("Loaded VoteReact.")
