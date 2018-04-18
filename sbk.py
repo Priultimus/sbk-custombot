@@ -315,6 +315,7 @@ testsbk = discord.utils.get(bot.guilds, id=402197486317338625)
 
 bot.load_extension(f"modules.dev")
 bot.load_extension(f"modules.roles")
+bot.load_extension(f"modules.votereact")
 # bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")

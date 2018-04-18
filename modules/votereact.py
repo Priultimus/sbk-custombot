@@ -62,3 +62,7 @@ class VoteReact:
                 pass
         else:
             pass
+
+def setup(bot):
+    bot.add_cog(VoteReact())
+    print("Loaded VoteReact.")
