@@ -6,8 +6,7 @@ import asyncio
 import inspect
 from contextlib import redirect_stdout
 import io
-from __main__ import DataManager
-from __main__ import Checks
+from __main__ import DataManager, Checks, Formatter
 # to expose to the eval command
 import discord
 
@@ -32,6 +31,24 @@ class Developer:
             return f'```py\n{e.__class__.__name__}: {e}\n```'
         return f"""```py\n{e.text}{"^":>{e.offset}}\n{e.__class__.__name__}:
         {e}```"""
+
+    @commands.command()
+    @Checks.is_owner()
+    async def traceback(self, ctx, public: bool=False):
+        """Sends to the owner the last command exception that has occurred
+        If public (yes is specified), it will be sent to the chat instead"""
+        pagify = Formatter.pagify
+        box = Formatter.box
+        if not public:
+            destination = ctx.author
+        else:
+            destination = ctx.channel
+
+        if self.bot._last_exception:
+            for page in pagify(self.bot._last_exception):
+                await destination.send(box(page, lang="py"))
+        else:
+            await ctx.send(Formatter.success("No exception has occurred yet."))
 
     @commands.command()
     @Checks.is_staff()

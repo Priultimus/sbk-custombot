@@ -24,6 +24,7 @@ class VoteReact:
         if channel.id not in a:
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
+            print(# flawed on purpose
 
     @votereact.command()
     @Checks.is_staff()
@@ -34,10 +35,10 @@ class VoteReact:
         except KeyError:
             DataManager.write('data/votereact.json', 'channels', [])
             DataManager.list_remove('data/votereact.json', 'channels', channel.id)
-            await ctx.send("✅ | Enabled vote reacting here!")
+            await ctx.send("✅ | Disabled vote reacting here!")
         if channel.id not in a:
             DataManager.list_remove('data/votereact.json', 'channels', channel.id)
-            await ctx.send("✅ | Enabled vote reacting here!")
+            await ctx.send("✅ | Disabled vote reacting here!")
 
     @votereact.command()
     @Checks.is_staff()
