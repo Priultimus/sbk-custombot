@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import time
-import modules
+from __main__ import test, DataManager
 
 aactivity = """
 **>xp :** Checks your xp.
@@ -75,7 +75,9 @@ def ant_help(ctx):
     return embed
 
 
-class Help:
+class General:
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command(name="help")
     async def _help(self, ctx):
@@ -96,9 +98,17 @@ class Help:
         await ctx.send(f"🏓 | My ping is **{ping}ms!**")
 
     async def on_member_join(self, member):
-        sbk = 
+        if test:
+            testsbk = discord.utils.get(self.bot.guilds, id=402197486317338625)
+            channel = discord.utils.get(testsbk.channels, id=431944465532321802)
+        else:
+            mainsbk = discord.utils.get(self.bot.guilds, id=257889450850254848)
+            channel = discord.utils.get(mainsbk.channels, id=257895860757725186)
+        message = DataManager.read('data/general.json')['welcome']
+        await channel.send(message + f"{member.mention}!")
+
 
 def setup(bot):
     bot.remove_command('help')
-    bot.add_cog(Help())
-    print("Loaded help.")
+    bot.add_cog(General(bot))
+    print("Loaded General.")

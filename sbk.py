@@ -318,7 +318,7 @@ bot.load_extension(f"modules.roles")
 # bot.load_extension(f"modules.verification")
 bot.load_extension("modules.artchannel")
 bot.load_extension("modules.challenges")
-bot.load_extension("modules.help")
+bot.load_extension("modules.general")
 bot.load_extension("modules.activity")
 if test:
     bot.load_extension("modules.movie")
