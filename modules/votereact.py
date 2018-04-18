@@ -5,13 +5,13 @@ from __main__ import Checks, DataManager
 
 class Voting:
 
-    @commands.group(name="votereact")
+    @commands.group(name="votereact", invoke_without_command=True)
     @Checks.is_staff()
     async def votereact(self, ctx):
         if ctx.invoked_subcommand is None:
             pass
 
-    @votereact.command(invoke_without_command=True)
+    @votereact.command()
     @Checks.is_staff()
     async def on(self, ctx):
         channel = ctx.channel
@@ -25,7 +25,7 @@ class Voting:
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
 
-    @votereact.command(invoke_without_command=True)
+    @votereact.command()
     @Checks.is_staff()
     async def off(self, ctx):
         channel = ctx.channel
