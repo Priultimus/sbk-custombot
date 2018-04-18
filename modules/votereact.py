@@ -24,7 +24,6 @@ class VoteReact:
         if channel.id not in a:
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
-            print(# flawed on purpose
 
     @votereact.command()
     @Checks.is_staff()
