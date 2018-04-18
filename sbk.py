@@ -301,7 +301,20 @@ class Bot(commands.AutoShardedBot):
         os.execl(python, python, * sys.argv)
 
     async def on_ready(self):
-        print("Ready!")
+        modules = os.listdir('modules')
+        modules.remove('pycache')
+        for b in modules:
+            try:
+                b = "modules." + str(b.replace('.py', ''))
+                if b == "modules.movies":
+                    pass
+                else:
+                    bot.load_extension(b)
+            except Exception as error:
+                log = (f"Exception in module '{b}'\n")
+                log += "".join(traceback.format_exception(type(error), error,
+                                                          error.__traceback__))
+                self._last_exception = log
 
     async def on_message(self, message):
         after = message
@@ -388,19 +401,7 @@ if test:
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136)
 
-mainsbk = discord.utils.get(bot.guilds, id=257889450850254848)
-testsbk = discord.utils.get(bot.guilds, id=402197486317338625)
-
-bot.load_extension(f"modules.dev")
-bot.load_extension(f"modules.roles")
-bot.load_extension(f"modules.votereact")
-# bot.load_extension(f"modules.verification")
-bot.load_extension("modules.artchannel")
-bot.load_extension("modules.challenges")
-bot.load_extension("modules.general")
-bot.load_extension("modules.activity")
 if test:
-    bot.load_extension("modules.movie")
     print("--- Testing mode active! ----")
 
 
