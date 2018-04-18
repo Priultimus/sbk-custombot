@@ -15,9 +15,12 @@ class Voting:
     @Checks.is_staff()
     async def on(self, ctx):
         channel = ctx.channel
+        print("Channel assigned.")
         try:
             a = DataManager.read('data/votereact.json')['channels']
+            print("A assigned.")
         except KeyError:
+            print("KeyError.")
             DataManager.write('data/votereact.json', 'channels', [])
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
