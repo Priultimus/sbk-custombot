@@ -146,6 +146,16 @@ class DataManager:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Written {b} to {a} as a list")
 
+    def list_remove(filename, a, b):
+        with open(filename, "r") as jsonFile:
+            data = json.load(jsonFile)
+        if isinstance(a, int):
+            a = str(a)
+        data[a].pop(b)
+        with open(filename, "w") as jsonFile:
+            json.dump(data, jsonFile)
+        print(f"INFO:sbk.DataManager: Deleted {b} from {a} as a list")
+
     def delete(filename, a):
         with open(filename, "r") as jsonFile:
             data = json.load(jsonFile)
