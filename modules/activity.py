@@ -92,11 +92,11 @@ class Tracker:
     async def leaderboard(self, ctx):
         await ctx.trigger_typing()
         users = Manager.leaderboard()
+        await ctx.trigger_typing()
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
         c = 0
         embed = discord.Embed(title='Sinbad Knights top three!',
                               color=ctx.author.color)
-        await ctx.trigger_typing()
         for user in users:
             c += 1
             member = discord.utils.get(sbk.members, id=int(user))
@@ -110,7 +110,6 @@ class Tracker:
                         embed.add_field(name=member.name, value=f"XP: **{z}**")
                 else:
                     continue
-
         await ctx.send(embed=embed)
 
     @commands.command()

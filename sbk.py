@@ -359,7 +359,7 @@ class Bot(commands.AutoShardedBot):
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context
         error : Exception"""
-
+        print(error)
         if hasattr(ctx.command, 'on_error'):
             return
         ignored = (commands.CommandNotFound, commands.UserInputError)
