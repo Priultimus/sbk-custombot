@@ -90,6 +90,7 @@ class Tracker:
 
     @commands.command(aliases=['lb', 'levels'])
     async def leaderboard(self, ctx):
+        await ctx.trigger_typing()
         users = Manager.leaderboard()
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
         c = 0

@@ -220,8 +220,8 @@ class Formatter:
     def warning(text):
         return f"<:error:436279057416585217> | {text}"
 
-    def success(text):
-        return f"✅ | {text}"
+    async def success(ctx, text):
+        a = await ctx.send(f"✅ | {text}")
 
     def bold(text):
         return f"**{text}**"
