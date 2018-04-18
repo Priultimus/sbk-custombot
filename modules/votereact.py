@@ -3,7 +3,7 @@ from discord.ext import commands
 from __main__ import Checks, DataManager
 
 
-class VoteReact:
+class Voting:
 
     @commands.group(name="votereact")
     @Checks.is_staff()
@@ -11,7 +11,7 @@ class VoteReact:
         if ctx.invoked_subcommand is None:
             pass
 
-    @votereact.command()
+    @votereact.command(invoke_without_command=True)
     @Checks.is_staff()
     async def on(self, ctx):
         channel = ctx.channel
@@ -25,7 +25,7 @@ class VoteReact:
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
 
-    @votereact.command()
+    @votereact.command(invoke_without_command=True)
     @Checks.is_staff()
     async def off(self, ctx):
         channel = ctx.channel
@@ -62,6 +62,7 @@ class VoteReact:
                 pass
         else:
             pass
+
 
 def setup(bot):
     bot.add_cog(VoteReact())
