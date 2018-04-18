@@ -49,7 +49,7 @@ class Developer:
             for page in pagify(self.bot._last_exception):
                 await destination.send(box(page, lang="py"))
         else:
-            await Formatter.success("No exception has occurred yet.")
+            await Formatter.success(ctx, "No exception has occurred yet.")
 
     @commands.command()
     @Checks.is_staff()
