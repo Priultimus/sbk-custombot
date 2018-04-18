@@ -16,6 +16,7 @@ class Developer:
     def __init__(self, bot):
         self._last_result = None
         self.sessions = set()
+        self.bot = bot
 
     def cleanup_code(self, content):
         """Automatically removes code blocks from the code."""
