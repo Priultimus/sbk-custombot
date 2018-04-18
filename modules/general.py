@@ -75,7 +75,9 @@ def ant_help(ctx):
     return embed
 
 
-class Help:
+class General:
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command(name="help")
     async def _help(self, ctx):
@@ -97,10 +99,10 @@ class Help:
 
     async def on_member_join(self, member):
         if test:
-            testsbk = discord.utils.get(self.guilds, id=402197486317338625)
+            testsbk = discord.utils.get(self.bot.guilds, id=402197486317338625)
             channel = discord.utils.get(testsbk, id=431944465532321802)
         else:
-            mainsbk = discord.utils.get(self.guilds, id=257889450850254848)
+            mainsbk = discord.utils.get(self.bot.guilds, id=257889450850254848)
             channel = discord.utils.get(mainsbk, id=257895860757725186)
         message = DataManager.read('data/general.json')['welcome']
         await channel.send(message + f"{member.mention}!")
@@ -108,5 +110,5 @@ class Help:
 
 def setup(bot):
     bot.remove_command('help')
-    bot.add_cog(Help())
-    print("Loaded help.")
+    bot.add_cog(General(bot))
+    print("Loaded General.")
