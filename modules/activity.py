@@ -96,6 +96,7 @@ class Tracker:
         c = 0
         embed = discord.Embed(title='Sinbad Knights top three!',
                               color=ctx.author.color)
+        await ctx.trigger_typing()
         for user in users:
             c += 1
             member = discord.utils.get(sbk.members, id=int(user))
