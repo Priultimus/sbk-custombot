@@ -315,6 +315,7 @@ class Bot(commands.AutoShardedBot):
                 log += "".join(traceback.format_exception(type(error), error,
                                                           error.__traceback__))
                 self._last_exception = log
+        print("Ready!")
 
     async def on_message(self, message):
         after = message
