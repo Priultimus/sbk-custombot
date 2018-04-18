@@ -310,7 +310,7 @@ if test:
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136)
 
-mainsbk = discord.utils.get(bot.guilds, id-257889450850254848)
+mainsbk = discord.utils.get(bot.guilds, id=257889450850254848)
 testsbk = discord.utils.get(bot.guilds, id=402197486317338625)
 
 bot.load_extension(f"modules.dev")
