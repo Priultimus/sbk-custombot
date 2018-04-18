@@ -302,7 +302,7 @@ class Bot(commands.AutoShardedBot):
 
     async def on_ready(self):
         modules = os.listdir('modules')
-        modules.remove('pycache')
+        modules.remove('__pycache__')
         for b in modules:
             try:
                 b = "modules." + str(b.replace('.py', ''))
