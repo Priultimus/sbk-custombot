@@ -218,7 +218,7 @@ class Formatter:
         return f"⚠ | {text}"
 
     def warning(text):
-        return f"❌ | {text}"
+        return f"<:error:436279057416585217> | {text}"
 
     def success(text):
         return f"✅ | {text}"

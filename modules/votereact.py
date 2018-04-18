@@ -9,7 +9,7 @@ class Voting:
     @Checks.is_staff()
     async def votereact(self, ctx):
         if ctx.invoked_subcommand is None:
-            pass
+            await ctx.send("<:error:436279057416585217>")
 
     @votereact.command()
     @Checks.is_staff()
