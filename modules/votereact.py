@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from __main__ import Checks, DataManager
+from __main__ import Checks, DataManager, Formatter
 
 
 class Voting:
@@ -27,6 +27,8 @@ class Voting:
         if channel.id not in a:
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
+        else:
+            await Formatter.error(ctx, "Vote reacting is already enabled here!")
 
     @votereact.command()
     @Checks.is_staff()
@@ -38,9 +40,11 @@ class Voting:
             DataManager.write('data/votereact.json', 'channels', [])
             DataManager.list_remove('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Disabled vote reacting here!")
-        if channel.id not in a:
+        if channel.id in a:
             DataManager.list_remove('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Disabled vote reacting here!")
+        else:
+            await Formatter.error(ctx, "Votereact isn't enabled here.")
 
     @votereact.command()
     @Checks.is_staff()

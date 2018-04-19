@@ -214,11 +214,11 @@ class Checks:
 class Formatter:
     """Credits to Red for this formatter. Modified just the tiniest bit."""
 
-    def error(text):
-        return f"⚠ | {text}"
+    async def warning(ctx, text):
+        await ctx.send(f"⚠ | {text}")
 
-    def warning(text):
-        return f"<:error:436279057416585217> | {text}"
+    async def error(ctx, text):
+        await ctx.send(f"<:error:436279057416585217> | {text}")
 
     async def success(ctx, text):
         await ctx.send(f"✅ | {text}")
@@ -359,7 +359,6 @@ class Bot(commands.AutoShardedBot):
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context
         error : Exception"""
-        print(error)
         if hasattr(ctx.command, 'on_error'):
             return
         ignored = (commands.CommandNotFound, commands.UserInputError)
@@ -370,7 +369,7 @@ class Bot(commands.AutoShardedBot):
             return
 
         elif isinstance(error, commands.DisabledCommand):
-            return await ctx.send(f'❌ | {ctx.command} has been disabled.')
+            return await Formatter.error{ctx.command} has been disabled.')
 
         elif isinstance(error, commands.NoPrivateMessage):
             try:
