@@ -369,17 +369,17 @@ class Bot(commands.AutoShardedBot):
             return
 
         elif isinstance(error, commands.DisabledCommand):
-            return await Formatter.error{ctx.command} has been disabled.')
+            return await Formatter.error(ctx, f"{ctx.command} has been disabled.")
 
         elif isinstance(error, commands.NoPrivateMessage):
             try:
-                return await ctx.author.send(f"""❌ | {ctx.command}
+                return await Formatter.error(ctx, f"""❌ | {ctx.command}
                 cannot be used in Private Messages.""")
             except Exception as e:
                 pass
         elif isinstance(error, discord.errors.Forbidden):
-            await ctx.send(f"❌ | I lack the required permissions "
-                           "to execute this command properly.")
+            await Formatter.error(ctx, "I lack the required permissions "
+                                  "to execute this command properly.")
 
         else:
             # if ctx.author.id in DataManager.read('data/bot.json')['OWNERS']:
