@@ -13,22 +13,31 @@ class Voting:
 
     @votereact.command()
     @Checks.is_staff()
-    async def on(self, ctx):
-        channel = ctx.channel
-        print("Channel assigned.")
+    async def on(self, ctx, channel: discord.TextChannel=None, *args):
+        if channel is None:
+            channel = ctx.channel
+        args = ' '.join(args)
         try:
             a = DataManager.read('data/votereact.json')['channels']
-            print("A assigned.")
         except KeyError:
-            print("KeyError.")
             DataManager.write('data/votereact.json', 'channels', [])
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
+        try:
+            DataManager.read('data/votereact.json')['options']
+        except KeyError:
+            DataManager.write('data/votereact.json', 'options', [])
         if channel.id not in a:
             DataManager.list_update('data/votereact.json', 'channels', channel.id)
             await ctx.send("✅ | Enabled vote reacting here!")
         else:
             await Formatter.error(ctx, "Vote reacting is already enabled here!")
+        if '--arrows' or '-a' in args:
+            DataManager.list_update('data/votereact.json', 'options', 'arrows')
+        elif '-nd' or '--no-downvote' in args:
+            DataManager.list_update('data/votereact.json', 'options', 'nd')
+        elif '-np' or '--no-upvote' in args:
+            DataManager.list_update('data/votereact.json', 'options', 'np')
 
     @votereact.command()
     @Checks.is_staff()
@@ -58,13 +67,45 @@ class Voting:
 
     async def on_message(self, message):
         a = DataManager.read('data/votereact.json')['channels']
+        b = DataManager.read('data/votereact.json')['options']
+        if message.author.bot:
+            return
         if message.channel.id in a:
             if not message.attachments == []:
-                await message.add_reaction('\U0001f44d')
-                await message.add_reaction('\U0001f44e')
+                if 'arrows' in b:
+                    if 'np' in b:
+                        await message.add_reaction("\U0001f53d")
+                    elif 'nd' in b:
+                        await message.add_reaction("\U0001f53c")
+                    else:
+                        await message.add_reaction("\U0001f53d")
+                        await message.add_reaction("\U0001f53c")
+                else:
+                    if 'np' in b:
+                        await message.add_reaction("\U0001f44e")
+                    elif 'nd' in b:
+                        await message.add_reaction('\U0001f44d')
+                    else:
+                        await message.add_reaction('\U0001f44d')
+                        await message.add_reaction('\U0001f44e')
             elif not message.embeds == []:
-                await message.add_reaction('\U0001f44d')
-                await message.add_reaction('\U0001f44e')
+                if 'arrows' in b:
+                    if 'np' in b:
+                        await message.add_reaction("\U0001f53d")
+                    elif 'nd' in b:
+                        await message.add_reaction("\U0001f53c")
+                    else:
+                        await message.add_reaction("\U0001f53d")
+                        await message.add_reaction("\U0001f53c")
+
+                else:
+                    if 'np' in b:
+                        await message.add_reaction("\U0001f44e")
+                    elif 'nd' in b:
+                        await message.add_reaction('\U0001f44d')
+                    else:
+                        await message.add_reaction('\U0001f44d')
+                        await message.add_reaction('\U0001f44e')
             else:
                 pass
         else:
