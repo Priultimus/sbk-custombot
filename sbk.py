@@ -151,7 +151,7 @@ class DataManager:
             data = json.load(jsonFile)
         if isinstance(a, int):
             a = str(a)
-        data[a].pop(b)
+        data[a].remove(b)
         with open(filename, "w") as jsonFile:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Deleted {b} from {a} as a list")
