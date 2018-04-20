@@ -16,6 +16,7 @@ class Voting:
     async def on(self, ctx, channel: discord.TextChannel=None, *args):
         if channel is None:
             channel = ctx.channel
+        ch = str(channel.id)
         args = ' '.join(args)
         try:
             a = DataManager.read('data/votereact.json')['channels']
@@ -33,27 +34,31 @@ class Voting:
         else:
             await Formatter.error(ctx, "Vote reacting is already enabled here!")
         if '--arrows' or '-a' in args:
-            DataManager.list_update('data/votereact.json', 'options', 'arrows')
+            DataManager.list_update('data/votereact.json', ch, 'arrows')
         elif '-nd' or '--no-downvote' in args:
-            DataManager.list_update('data/votereact.json', 'options', 'nd')
+            DataManager.list_update('data/votereact.json', ch, 'nd')
         elif '-np' or '--no-upvote' in args:
-            DataManager.list_update('data/votereact.json', 'options', 'np')
+            DataManager.list_update('data/votereact.json', ch, 'np')
+        else:
+            DataManager.list_update('data/votereact.json', ch, None)
 
     @votereact.command()
     @Checks.is_staff()
-    async def off(self, ctx):
-        channel = ctx.channel
+    async def off(self, ctx, channel: discord.TextChannel=None):
+        if channel is None:
+            channel = ctx.channel
+        ch = str(channel.id)
         try:
             a = DataManager.read('data/votereact.json')['channels']
         except KeyError:
             DataManager.write('data/votereact.json', 'channels', [])
-            DataManager.list_remove('data/votereact.json', 'channels', channel.id)
-            await ctx.send("✅ | Disabled vote reacting here!")
+            await Formatter.error(ctx, 'Votereact was never enabled!')
         if channel.id in a:
             DataManager.list_remove('data/votereact.json', 'channels', channel.id)
-            await ctx.send("✅ | Disabled vote reacting here!")
+            DataManager.list_update('data/votereact.json', ch, None)
+            await ctx.send("✅ | Disabled vote reacting!")
         else:
-            await Formatter.error(ctx, "Votereact isn't enabled here.")
+            await Formatter.error(ctx, "Votereact wasn't ever enabled.")
 
     @votereact.command()
     @Checks.is_staff()
@@ -63,11 +68,14 @@ class Voting:
         for channel in channels:
             ch = discord.utils.get(ctx.guild.channels, id=channel)
             embed.add_field(name=ch.name, value=ch.mention, inline=False)
-        await ctx.send(embed=embed)
+        if channels == []:
+            await Formatter.error(ctx, "No votereact channels!")
+        else:
+            await ctx.send(embed=embed)
 
     async def on_message(self, message):
         a = DataManager.read('data/votereact.json')['channels']
-        b = DataManager.read('data/votereact.json')['options']
+        b = DataManager.read('data/votereact.json')[str(message.channel.id)]
         if message.author.bot:
             return
         if message.channel.id in a:
