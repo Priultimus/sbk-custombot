@@ -75,7 +75,10 @@ class Voting:
 
     async def on_message(self, message):
         a = DataManager.read('data/votereact.json')['channels']
-        b = DataManager.read('data/votereact.json')[str(message.channel.id)]
+        try:
+            b = DataManager.read('data/votereact.json')[str(message.channel.id)]
+        except KeyError:
+            b = None
         if message.author.bot:
             return
         if message.channel.id in a:
