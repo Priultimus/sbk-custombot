@@ -49,6 +49,7 @@ class Voting:
         else:
             DataManager.list_update('data/votereact.json', ch, None)
             if channel.id not in a:
+                print("/")
                 DataManager.list_update('data/votereact.json', 'channels', channel.id)
                 await ctx.send("✅ | Enabled vote reacting here!")
             else:
