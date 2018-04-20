@@ -27,6 +27,7 @@ class Voting:
         if '--arrows' or '-a' in args:
             print("Hm. 1")
             DataManager.list_update('data/votereact.json', ch, 'arrows')
+            print("Interest.")
             if channel.id not in a:
                 DataManager.list_update('data/votereact.json', 'channels', channel.id)
                 await ctx.send("✅ | Enabled vote reacting here!")
