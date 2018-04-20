@@ -27,18 +27,33 @@ class Voting:
 
         if '--arrows' or '-a' in args:
             DataManager.list_update('data/votereact.json', ch, 'arrows')
+            if channel.id not in a:
+                DataManager.list_update('data/votereact.json', 'channels', channel.id)
+                await ctx.send("✅ | Enabled vote reacting here!")
+            else:
+                await Formatter.error(ctx, "Vote reacting is already enabled here!")
         elif '-nd' or '--no-downvote' in args:
+            if channel.id not in a:
+                DataManager.list_update('data/votereact.json', 'channels', channel.id)
+                await ctx.send("✅ | Enabled vote reacting here!")
+            else:
+                await Formatter.error(ctx, "Vote reacting is already enabled here!")
             DataManager.list_update('data/votereact.json', ch, 'nd')
         elif '-np' or '--no-upvote' in args:
+            if channel.id not in a:
+                DataManager.list_update('data/votereact.json', 'channels', channel.id)
+                await ctx.send("✅ | Enabled vote reacting here!")
+            else:
+                await Formatter.error(ctx, "Vote reacting is already enabled here!")
             DataManager.list_update('data/votereact.json', ch, 'np')
         else:
             DataManager.list_update('data/votereact.json', ch, None)
+            if channel.id not in a:
+                DataManager.list_update('data/votereact.json', 'channels', channel.id)
+                await ctx.send("✅ | Enabled vote reacting here!")
+            else:
+                await Formatter.error(ctx, "Vote reacting is already enabled here!")
 
-        if channel.id not in a:
-            DataManager.list_update('data/votereact.json', 'channels', channel.id)
-            await ctx.send("✅ | Enabled vote reacting here!")
-        else:
-            await Formatter.error(ctx, "Vote reacting is already enabled here!")
 
     @votereact.command()
     @Checks.is_staff()
