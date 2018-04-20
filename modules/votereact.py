@@ -25,6 +25,7 @@ class Voting:
             DataManager.write('data/votereact.json', 'channels', [])
 
         if '--arrows' or '-a' in args:
+            print("Hm. 1")
             DataManager.list_update('data/votereact.json', ch, 'arrows')
             if channel.id not in a:
                 DataManager.list_update('data/votereact.json', 'channels', channel.id)
@@ -32,6 +33,7 @@ class Voting:
             else:
                 await Formatter.error(ctx, "Vote reacting is already enabled here!")
         elif '-nd' or '--no-downvote' in args:
+            print("Hm. 2")
             if channel.id not in a:
                 DataManager.list_update('data/votereact.json', 'channels', channel.id)
                 await ctx.send("✅ | Enabled vote reacting here!")
@@ -39,6 +41,7 @@ class Voting:
                 await Formatter.error(ctx, "Vote reacting is already enabled here!")
             DataManager.list_update('data/votereact.json', ch, 'nd')
         elif '-np' or '--no-upvote' in args:
+            print("Hm. 3")
             if channel.id not in a:
                 DataManager.list_update('data/votereact.json', 'channels', channel.id)
                 await ctx.send("✅ | Enabled vote reacting here!")
@@ -46,6 +49,7 @@ class Voting:
                 await Formatter.error(ctx, "Vote reacting is already enabled here!")
             DataManager.list_update('data/votereact.json', ch, 'np')
         else:
+            print("Hm. 4")
             DataManager.list_update('data/votereact.json', ch, None)
             if channel.id not in a:
                 print("/")
