@@ -18,12 +18,11 @@ class Voting:
             channel = ctx.channel
         ch = str(channel.id)
         args = ' '.join(args)
+        DataManager.write('data/votereact.json', ch, [])
         try:
             a = DataManager.read('data/votereact.json')['channels']
         except KeyError:
             DataManager.write('data/votereact.json', 'channels', [])
-            DataManager.list_update('data/votereact.json', 'channels', channel.id)
-            await ctx.send("✅ | Enabled vote reacting here!")
 
         if '--arrows' or '-a' in args:
             DataManager.list_update('data/votereact.json', ch, 'arrows')
