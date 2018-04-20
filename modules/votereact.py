@@ -23,7 +23,7 @@ class Voting:
             a = DataManager.read('data/votereact.json')['channels']
         except KeyError:
             DataManager.write('data/votereact.json', 'channels', [])
-
+        print(args)
         if '--arrows' or '-a' in args:
             print("Hm. 1")
             DataManager.list_update('data/votereact.json', ch, 'arrows')
