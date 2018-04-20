@@ -55,7 +55,7 @@ class Voting:
             await Formatter.error(ctx, 'Votereact was never enabled!')
         if channel.id in a:
             DataManager.list_remove('data/votereact.json', 'channels', channel.id)
-            DataManager.list_update('data/votereact.json', ch, None)
+            DataManager.list_update('data/votereact.json', ch, [])
             await ctx.send("✅ | Disabled vote reacting!")
         else:
             await Formatter.error(ctx, "Votereact wasn't ever enabled.")
@@ -78,7 +78,7 @@ class Voting:
         try:
             b = DataManager.read('data/votereact.json')[str(message.channel.id)]
         except KeyError:
-            b = None
+            b = []
         if message.author.bot:
             return
         if message.channel.id in a:
