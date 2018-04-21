@@ -110,6 +110,9 @@ class Tracker:
                         embed.add_field(name=member.name, value=f"XP: **{z}**")
                 else:
                     continue
+            else:
+                break
+
         await ctx.send(embed=embed)
 
     @commands.command()
