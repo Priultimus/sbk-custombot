@@ -12,6 +12,7 @@ import asyncio
 try:
     import uvloop
 except Exception:
+    loop = None
     pass
 else:
     if platform.system() == 'Windows':
