@@ -133,16 +133,17 @@ class Tracker:
         for user in users:
             c += 1
             member = discord.utils.get(sbk.members, id=int(user))
-            if not c >= 10:
+            if not c >= 11:
                 z = m.get_xp(user)
                 zz = DataManager.read('data/activity.json')['last-week']
                 if member is not None:
                     if zz and user in zz:
                         if not c >= 4:
-                            embed.add_field(name=f"{c}. "+ member.name, value=f"🔥 XP: **{z}**")
+                            embed.add_field(name=f"{c}. "+ member.name, value=f"🔥 XP: **{z}**", inline=False)
                     else:
-                        embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**")
+                        embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**", inline=False)
                 else:
+                    c -= 1
                     continue
             else:
                 break
