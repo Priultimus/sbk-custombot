@@ -8,6 +8,11 @@ import threading
 from discord.ext import commands
 import logging
 import platform
+import asyncio
+import uvloop
+loop = uvloop.new_event_loop()
+
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,9 +25,13 @@ key = "150qKj9o0BzYp1M5XzpyEuwQ7lkMJF-_9tWm0rnK5T8w" if test else \
 try:
     uri = '127.0.0.1'
     client = MongoClient(uri)
-    dbs = client['Sinbot']
-except:
+    dbs = client['sinbot']
+except Exception:
     print("Cannot connect to MongoDB, DataManager.db will NOT be supported.")
+
+
+class CollectionNotFound(Exception):
+    pass
 
 
 class collections():
@@ -44,7 +53,7 @@ class DataManager:
         def insert(types, db, key=None, value=None, **kwargs):
             """Insert a document into the mongodb collection of your choosing.
             :param types: The type of document you are trying to insert. Currently supported is str, int, array and object.
-            :param db: The collection in which you choose. Currently supported is guilds, settings and eco.
+            :param db: The collection in which you choose. Currently supported is hopefully all of them.
             :param key: A paramater only used in object.
             :param value: Also only used in object.
             :param kwargs: The name of the document you choose to insert. Like name="name-of-document" or home="way-to-home."
@@ -104,68 +113,76 @@ class DataManager:
             else:
                 return("Oops, that's not a type.")
 
-        def find(db, name):
+        def find(db, key, value):
             for collection in collections.__dict__['attrs']:
                 if db == collection:
-                    return(collections.__dict__[db].find_one({'name': name}))
+                    return(collections.__dict__[db].find_one({key: value}))
                 else:
                     continue
             return('The db paramater isn\'t any collection in the database!')
 
-        def delete(db, name):
+        def save(db, toSave):
             for collection in collections.__dict__['attrs']:
                 if db == collection:
-                    return(collections.__dict__[db].delete_one({'name': name}))
+                    return(collections.__dict__[db].save(toSave))
+                else:
+                    continue
+            return("The DB paramater isn't any collection in the Database!")
+
+        def delete(db, key, value):
+            for collection in collections.__dict__['attrs']:
+                if db == collection:
+                    return(collections.__dict__[db].delete_one({key: value}))
                 else:
                     continue
             return("The db paramater isn't any collection in the database!")
 
     def update(filename, a, b):
-        with open(filename, "r") as jsonFile:
+        with open(filename, "r", encoding="utf8") as jsonFile:
             data = json.load(jsonFile)
         data[a] = b
-        with open(filename, "w") as jsonFile:
+        with open(filename, "w", encoding="utf8") as jsonFile:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Written {b} to {a}")
 
     def write(filename, a, b):
-        with open(filename, "r") as jsonFile:
+        with open(filename, "r", encoding="utf8") as jsonFile:
             data = json.load(jsonFile)
         data[a] = b
-        with open(filename, "w") as jsonFile:
+        with open(filename, "w", encoding="utf8") as jsonFile:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Written {b} to {a}")
 
     def list_update(filename, a, b):
-        with open(filename, "r") as jsonFile:
+        with open(filename, "r", encoding="utf8") as jsonFile:
             data = json.load(jsonFile)
         if isinstance(a, int):
             a = str(a)
         data[a].append(b)
-        with open(filename, "w") as jsonFile:
+        with open(filename, "w", encoding="utf8") as jsonFile:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Written {b} to {a} as a list")
 
     def list_remove(filename, a, b):
-        with open(filename, "r") as jsonFile:
+        with open(filename, "r", encoding="utf8") as jsonFile:
             data = json.load(jsonFile)
         if isinstance(a, int):
             a = str(a)
         data[a].remove(b)
-        with open(filename, "w") as jsonFile:
+        with open(filename, "w", encoding="utf8") as jsonFile:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Deleted {b} from {a} as a list")
 
     def delete(filename, a):
-        with open(filename, "r") as jsonFile:
+        with open(filename, "r", encoding="utf8") as jsonFile:
             data = json.load(jsonFile)
         del data[str(a)]
-        with open(filename, "w") as jsonFile:
+        with open(filename, "w", encoding="utf8") as jsonFile:
             json.dump(data, jsonFile)
         print(f"INFO:sbk.DataManager: Deleted {a}")
 
     def read(filename):
-        with open(filename) as f:
+        with open(filename, encoding="utf8") as f:
             stuff = json.load(f)
         return stuff
         print(f"INFO:sbk.DataManager: Read {filename}")
@@ -308,6 +325,8 @@ class Bot(commands.AutoShardedBot):
                 b = "modules." + str(b.replace('.py', ''))
                 if b == "modules.movies":
                     pass
+                elif b == 'modules.activity':
+                    pass
                 else:
                     bot.load_extension(b)
             except Exception as error:
@@ -397,9 +416,9 @@ class Bot(commands.AutoShardedBot):
 
 
 if test:
-    bot = Bot(command_prefix=">>", owner_id=286246724270555136)
+    bot = Bot(command_prefix=">>", owner_id=286246724270555136, loop=loop)
 else:
-    bot = Bot(command_prefix=">", owner_id=286246724270555136)
+    bot = Bot(command_prefix=">", owner_id=286246724270555136, loop=loop)
 
 if test:
     print("--- Testing mode active! ----")
