@@ -9,12 +9,15 @@ from discord.ext import commands
 import logging
 import platform
 import asyncio
-import uvloop
-
-if platform.system() == 'Windows':
-    loop = asyncio.new_event_loop()
+try:
+    import uvloop
+except Exception:
+    pass
 else:
-    loop = uvloop.new_event_loop()
+    if platform.system() == 'Windows':
+        loop = asyncio.new_event_loop()
+    else:
+        loop = uvloop.new_event_loop()
 
 logging.basicConfig(level=logging.INFO)
 
