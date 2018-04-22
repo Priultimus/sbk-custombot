@@ -140,6 +140,8 @@ class Tracker:
                     if zz and user in zz:
                         if not c >= 4:
                             embed.add_field(name=f"{c}. "+ member.name, value=f"🔥 XP: **{z}**", inline=False)
+                        else:
+                            embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**", inline=False)
                     else:
                         embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**", inline=False)
                 else:
