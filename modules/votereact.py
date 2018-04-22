@@ -17,7 +17,7 @@ class Voting:
         if channel is None:
             channel = ctx.channel
         ch = str(channel.id)
-        args = ' '.join(args)
+        args = ''.join(args)
         DataManager.write('data/votereact.json', ch, [])
         try:
             a = DataManager.read('data/votereact.json')['channels']

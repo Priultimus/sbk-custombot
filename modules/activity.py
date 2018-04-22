@@ -11,6 +11,8 @@ last_author = {}
 
 class Manager:
     """Management for activity tracker."""
+    def __init__(self):
+        self.name = 'name'
 
     def log_time_of_use(fn):
         """Time of use decorator."""
@@ -22,7 +24,7 @@ class Manager:
         return callback
 
     @log_time_of_use
-    async def xp_calc(author):
+    async def xp_calc(self, author):
         """Adds the XP to the author."""
         a = DataManager.read('data/activity.json')['done']
         global last_author
@@ -52,7 +54,7 @@ class Manager:
             else:
                 return None
 
-    def get_xp(author):
+    def get_xp(self, author):
         """Returns the XP of the author. Returns None if not avavilble."""
         try:
             xp = DataManager.read('data/xp.json')[str(author)]
@@ -60,10 +62,21 @@ class Manager:
         except KeyError:
             return None
 
-    def leaderboard():
+    def leaderboard(self):
         """Returns a list of the highest achievers this week."""
         x = DataManager.read('data/xp.json')
         return sorted(x, key=x.get, reverse=True)
+
+    def rank(self, uid):
+        """Returns a user's rank."""
+        c = 0
+        for a in self.leaderboard():
+            c += 1
+            if int(a) == int(uid):
+                return c
+                break
+            else:
+                continue
 
 
 class Tracker:
@@ -71,14 +84,34 @@ class Tracker:
 
     @commands.command(aliases=['rank', 'exp'])
     async def xp(self, ctx, user: discord.Member=None):
+        m = Manager()
         """Gets the XP of a user."""
         if user is None:
             user = ctx.author
-        if Manager.get_xp(user.id) is not None:
+        exp = m.get_xp(user.id)
+        xp = m.get_xp(ctx.author.id)
+        catch_up = round((exp-xp))
+        embed = discord.Embed(color=user.color)
+        if not user == ctx.author:
+            embed.set_author(name=user.name + "'s ranking statistics!",
+                             icon_url=user.avatar_url)
+        else:
+            embed.set_author(name="Your ranking statistics!",
+                             icon_url=user.avatar_url)
+        if m.get_xp(user.id) is not None:
             if not user == ctx.author:
-                await ctx.send(f"✅ | {user.mention}'s XP is: **{Manager.get_xp(user.id)}!**")
+                embed.add_field(name='XP:', value="**"+str(exp)+"**")
+                embed.add_field(name='Messages:', value="**"+str(int(exp/15))+"**")
+                embed.add_field(name='Rank:', value="**"+str(m.rank(user.id))+"**")
+                if not catch_up < 0:
+                    embed.add_field(name=f"XP to catch up with {user.name}:",
+                                    value=f"**{catch_up} (Messages: {round(catch_up/15)})**")
+                await ctx.send(embed=embed)
             else:
-                await ctx.send(f"✅ | Your XP is: **{Manager.get_xp(user.id)}!**")
+                embed.add_field(name='XP:', value="**"+str(exp)+"**")
+                embed.add_field(name='Messages:', value="**"+str(int(exp/15))+"**")
+                embed.add_field(name='Rank', value="**"+str(m.rank(user.id))+"**")
+                await ctx.send(embed=embed)
         else:
             await ctx.send("❌ | No XP!")
 
@@ -90,24 +123,25 @@ class Tracker:
 
     @commands.command(aliases=['lb', 'levels'])
     async def leaderboard(self, ctx):
-        await ctx.trigger_typing()
-        users = Manager.leaderboard()
-        await ctx.trigger_typing()
+        m = Manager()
+        users = m.leaderboard()
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
         c = 0
-        embed = discord.Embed(title='Sinbad Knights top three!',
-                              color=ctx.author.color)
+        embed = discord.Embed(color=ctx.author.color)
+        embed.set_author(name='Sinbad Knights Top Nine!',
+                         icon_url=ctx.guild.icon_url)
         for user in users:
             c += 1
             member = discord.utils.get(sbk.members, id=int(user))
-            if not c >= 4:
-                z = Manager.get_xp(user)
+            if not c >= 10:
+                z = m.get_xp(user)
                 zz = DataManager.read('data/activity.json')['last-week']
                 if member is not None:
                     if zz and user in zz:
-                        embed.add_field(name=member.name, value=f"🔥 XP: **{z}**")
+                        if not c >= 4:
+                            embed.add_field(name=f"{c}. "+ member.name, value=f"🔥 XP: **{z}**")
                     else:
-                        embed.add_field(name=member.name, value=f"XP: **{z}**")
+                        embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**")
                 else:
                     continue
             else:
@@ -137,12 +171,13 @@ class Tracker:
         # await ctx.send("Remember, only the top three get a custom!")
 
     async def on_message(self, message):
+        m = Manager()
         if message.author.bot:
             return
         if message.channel.id in DataManager.read('data/activity.json')['ignore-list']:
             return
         else:
-            await Manager.xp_calc(message.author)
+            await m.xp_calc(message.author)
 
 
 def setup(bot):

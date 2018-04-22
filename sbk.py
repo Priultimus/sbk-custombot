@@ -10,9 +10,11 @@ import logging
 import platform
 import asyncio
 import uvloop
-loop = uvloop.new_event_loop()
 
-
+if platform.system() == 'Windows':
+    loop = asyncio.new_event_loop()
+else:
+    loop = uvloop.new_event_loop()
 
 logging.basicConfig(level=logging.INFO)
 
@@ -325,7 +327,7 @@ class Bot(commands.AutoShardedBot):
                 b = "modules." + str(b.replace('.py', ''))
                 if b == "modules.movies":
                     pass
-                elif b == 'modules.activity':
+                elif b == 'modules.votereact':
                     pass
                 else:
                     bot.load_extension(b)
