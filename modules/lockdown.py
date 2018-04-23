@@ -1,5 +1,5 @@
 import discord
-from commands.ext import commands
+from discord.ext import commands
 from __main__ import Checks, DataManager, test
 
 if test == True:
