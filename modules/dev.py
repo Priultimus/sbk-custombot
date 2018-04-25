@@ -244,6 +244,19 @@ class Developer:
         await ctx.send("Updated owner!")
 
 
+    async def on_message(self, message):
+        list = ["ANT", "ANTONIO", "ANTONIO32A", "ANTO", "ANTIE", "ANTON", "166630166825664512"]
+        contents = message.content.split(" ")
+        bypass = ["166630166825664512"]
+        member = discord.utils.get(guild.members, id=166630166825664512)
+        for word in contents:
+            if word.upper() in list:
+                if not message.author.id in bypass:
+                    try:
+                        member.send(embed=discord.Embed(color=message.author.color, title=str(message.author) + str("({})".format(message.author.id), description=str(message.content), footer=str(message.id))
+                    except discord.errors.NotFound:
+                        return
+
 def setup(bot):
     bot.add_cog(Developer(bot))
     print("Loaded Dev.")
