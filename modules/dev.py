@@ -243,7 +243,7 @@ class Developer:
         DataManager.list_update('data/bot.json', 'OWNERS', member.id)
         await ctx.send("Updated owner!")
 
-
+"""
     async def on_message(self, message):
         list = ["ANT", "ANTONIO", "ANTONIO32A", "ANTO", "ANTIE", "ANTON", "166630166825664512"]
         contents = message.content.split(" ")
@@ -256,7 +256,7 @@ class Developer:
                         member.send(embed=discord.Embed(color=message.author.color, title=str(message.author) + str("({})".format(message.author.id), description=str(message.content), footer=str(message.id))
                     except discord.errors.NotFound:
                         return
-
+"""
 def setup(bot):
     bot.add_cog(Developer(bot))
     print("Loaded Dev.")
