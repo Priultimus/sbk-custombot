@@ -422,7 +422,7 @@ class Bot(commands.AutoShardedBot):
 
 
 if test:
-    bot = Bot(command_prefix=">>", owner_id=286246724270555136, loop=loop)
+    bot = Bot(command_prefix=">>>", owner_id=286246724270555136, loop=loop)
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136, loop=loop)
 
