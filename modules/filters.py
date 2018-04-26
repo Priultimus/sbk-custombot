@@ -11,8 +11,6 @@ class Filters:
                 if not message.author.id in bypass:
                     try:
                         member.send(embed=discord.Embed(color=message.author.color, title=str(message.author) + str("({})".format(message.author.id), description=str(message.content), footer=str(message.id))
-                    except discord.errors.NotFound:
-                        return
 
 def setup(bot):
     bot.add_cog(Filters(bot))
