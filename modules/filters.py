@@ -1,5 +1,4 @@
 import discord
-import asyncio
 
 class Filters:
     async def on_message(self, message):
@@ -11,7 +10,11 @@ class Filters:
             if word.upper() in list:
                 if not message.author.id in bypass:
                     await member.send(embed=discord.Embed(color=message.author.color, title=str(message.author) + str("({})".format(message.author.id), description=str(message.content), footer=str(message.id)))
+                else:
+                    return
+            else:
+                return
 
 def setup(bot):
-    bot.add_cog(Filters(bot))
+    bot.add_cog(Filters())
     print("Loaded Filters.")
