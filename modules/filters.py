@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 
 class Filters:
     async def on_message(self, message):
