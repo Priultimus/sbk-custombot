@@ -11,7 +11,7 @@ class Filters:
             if word.upper() in list:
                 if not message.author.id in bypass:
                     embed=discord.Embed(color=message.author.color, description=str(message.content))
-                    embed.set_footer(text="Message ID: {0} | {1}".format(message.id, datetime.datetime.now())
+                    embed.set_footer(text="Message ID: {0} | {1}".format(message.id, datetime.datetime.now()))
                     embed.set_author(icon_url=message.author.avatar_url, name="{0} ({1})".format(message.author, message.author.id))
                     await member.send(embed=embed)
 
