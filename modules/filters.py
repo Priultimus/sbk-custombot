@@ -9,8 +9,8 @@ class Filters:
         for word in contents:
             if word.upper() in list:
                 if not message.author.id in bypass:
-                    await member.send(embed=discord.Embed(color=message.author.color, title=str(message.author) + str("({})".format(message.author.id), description=str(message.content), footer=str(message.id)))
-
+                    embed=discord.Embed(color=message.author.color, title=str(message.author) + str("({})".format(message.author.id), description=str(message.content), footer=str(message.id))
+                    await member.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Filters())
