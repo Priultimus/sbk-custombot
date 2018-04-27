@@ -333,6 +333,8 @@ class Bot(commands.AutoShardedBot):
                     pass
                 elif b == 'modules.votereact':
                     pass
+                elif b == 'modules.lockdown':
+                    pass
                 else:
                     bot.load_extension(b)
             except Exception as error:
