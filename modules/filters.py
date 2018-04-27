@@ -5,8 +5,10 @@ from discord.ext import commands
 
 
 def notify(message):
-    embed = discord.Embed(color=message.author.color, description=str(message.content))
-    embed.set_footer(text="#{0} | {1}".format(message.channel.mention, message.id))
+    embed = discord.Embed(color=message.author.color, timestamp=message.created_at)
+    embed.add_field(name="Message:", value=message.content)
+    embed.add_field(name="Channel:", value=message.channel.mention)
+    embed.set_footer(text="#{0} | {1}".format(message.channel.name, message.id))
     embed.set_author(icon_url=message.author.avatar_url, name="{0} ({1})".format(message.author, message.author.id))
     return embed
 
