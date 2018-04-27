@@ -40,7 +40,7 @@ class Developer:
             module = "modules." + module
         ctx.bot.load_extension(module)
         module = module.replace('modules.', '')
-        await Formatter.sucess("Loaded {module}!")
+        await Formatter.success("Loaded {module}!")
 
     @commands.command()
     @Checks.is_owner()
@@ -49,7 +49,7 @@ class Developer:
             module = "modules." + module
         ctx.bot.unload_extension(module)
         module = module.replace('modules.', '')
-        await Formatter.sucess("Unloaded {module}!")
+        await Formatter.success("Unloaded {module}!")
 
     @commands.command()
     @Checks.is_owner()
@@ -59,7 +59,7 @@ class Developer:
         ctx.bot.unload_extension(module)
         ctx.bot.load_extension(module)
         module = module.replace('modules.', '')
-        await Formatter.sucess("Reloaded {module}!")
+        await Formatter.success("Reloaded {module}!")
 
     @commands.command()
     @Checks.is_owner()
