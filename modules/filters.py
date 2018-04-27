@@ -72,7 +72,7 @@ class Triggers:
             if keywords[id] == "":
                 return
             msg = keywords[id].split('|')
-            if (message.guild is not None) and ((any(var in message.content.lower() for var in msg)) or (target in message.mentions)):
+            if (message.guild is not None) and ((any(var in message.content.lower().split(" ") for var in msg)) or (target in message.mentions)):
                 if target is None:
                     pass
                 else:
@@ -93,7 +93,7 @@ class Triggers:
             if keywords[id] == "":
                 return
             msg = keywords[id].split('|')
-            if (message.guild is not None) and ((any(var in message.content.lower() for var in msg)) or (target in message.mentions)):
+            if (message.guild is not None) and ((any(var in message.content.lower().split(" ") for var in msg)) or (target in message.mentions)):
                 if target is None:
                     pass
                 else:
