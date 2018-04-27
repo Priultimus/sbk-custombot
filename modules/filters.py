@@ -98,7 +98,6 @@ class Triggers:
                         return
                     if message.author == target:
                         return
-                    await target.send(f"You were mentioned in {message.channel.mention}:")
                     await target.send(embed=notify(message))
 
 
