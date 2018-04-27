@@ -333,6 +333,16 @@ class Bot(commands.AutoShardedBot):
                     pass
                 elif b == 'modules.votereact':
                     pass
+                elif b == 'modules.music':
+                    if test:
+                        bot.load_extension(b)
+                    else:
+                        pass
+                elif b == 'modules.activity':
+                    if test:
+                        pass
+                    else:
+                        bot.load_extension(b)
                 else:
                     bot.load_extension(b)
             except Exception as error:
