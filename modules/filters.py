@@ -1,6 +1,5 @@
 import discord
-import datetime
-from __main__ import DataManager, Formatter
+from __main__ import DataManager, Formatter, Checks
 from discord.ext import commands
 
 
@@ -19,11 +18,13 @@ class Triggers:
         self.bot = bot
 
     @commands.command()
+    @Checks.is_owner()
     async def block(self, ctx, member: discord.Member):
         DataManager.list_update('data/ignorelist.json', 'ignore', member.id)
         await Formatter.success(ctx, f'Successfully blocked {member.name}')
 
     @commands.command()
+    @Checks.is_owner()
     async def unblock(self, ctx, member: discord.Member):
         DataManager.list_remove('data/ignorelist.json', 'ignore', member.id)
         await Formatter.success(ctx, f'Successfully unblocked {member.name}')
