@@ -244,7 +244,7 @@ class Formatter:
         await ctx.send(f"<:error:436279057416585217> | {text}")
 
     async def success(ctx, text):
-        await ctx.send(f"✅ | {text}")
+        await ctx.send(f"<a:success:439322665568960512> | {text}")
 
     def bold(text):
         return f"**{text}**"
