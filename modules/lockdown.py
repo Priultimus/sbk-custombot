@@ -1,9 +1,9 @@
-import discord
+"""import discord
 from discord.ext import commands
 from __main__ import Checks, DataManager, test
 
 if test == True:
-    guild = discord.utils.get(ctx.bot.guilds, id=402197486317338625)
+    guild = discord.utils.get(self.bot.guilds, id=402197486317338625)
 
 joining = DataManager.read('data/lockdown.json')[str('joining')]
 role = discord.utils.get(guild.roles, id=DataManager.read('data/lockdown.json')[str('role')])
@@ -45,3 +45,4 @@ class Lockdown:
                 await member.add_roles(role)
             else:
                 pass
+"""
