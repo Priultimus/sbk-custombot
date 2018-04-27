@@ -35,6 +35,34 @@ class Developer:
 
     @commands.command()
     @Checks.is_owner()
+    async def load(self, ctx, module: str):
+        if 'modules.' not in module:
+            module = "modules." + module
+        ctx.bot.load_extension(module)
+        module = module.replace('modules.', '')
+        await Formatter.sucess("Loaded {module}!")
+
+    @commands.command()
+    @Checks.is_owner()
+    async def unload(self, ctx, module: str):
+        if 'modules.' not in module:
+            module = "modules." + module
+        ctx.bot.unload_extension(module)
+        module = module.replace('modules.', '')
+        await Formatter.sucess("Unloaded {module}!")
+
+    @commands.command()
+    @Checks.is_owner()
+    async def reload(self, ctx, module: str):
+        if 'modules.' not in module:
+            module = "modules." + module
+        ctx.bot.unload_extension(module)
+        ctx.bot.load_extension(module)
+        module = module.replace('modules.', '')
+        await Formatter.sucess("Reloaded {module}!")
+
+    @commands.command()
+    @Checks.is_owner()
     async def traceback(self, ctx, public: bool=False):
         """Sends to the owner the last command exception that has occurred
         If public (yes is specified), it will be sent to the chat instead"""
