@@ -8,7 +8,7 @@ def notify(message):
     embed = discord.Embed(color=message.author.color, timestamp=message.created_at)
     embed.add_field(name="Message:", value=message.content)
     embed.add_field(name="Channel:", value=message.channel.mention)
-    embed.set_footer(text="#{0} | {1}".format(message.channel.name, message.id))
+    embed.set_footer(text=f"Message ID: {message.id} | Channel ID: {message.channel.id}")
     embed.set_author(icon_url=message.author.avatar_url, name="{0} ({1})".format(message.author, message.author.id))
     return embed
 
