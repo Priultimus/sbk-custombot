@@ -6,7 +6,7 @@ from discord.ext import commands
 
 def notify(message):
     embed = discord.Embed(color=message.author.color, description=str(message.content))
-    embed.set_footer(text="Message ID: {0} | {1}".format(message.id, datetime.datetime.now()))
+    embed.set_footer(text="#{0} | {1}".format(message.channel.mention, message.id))
     embed.set_author(icon_url=message.author.avatar_url, name="{0} ({1})".format(message.author, message.author.id))
     return embed
 
@@ -77,7 +77,7 @@ class Triggers:
                         return
                     if message.author == target:
                         return
-                    await target.send(f"You were mentioned in {message.channel.mention}:\n", embed=notify(message))
+                    await target.send(embed=notify(message))
 
     async def on_message_edit(self, before, after):
         message = after
@@ -98,7 +98,8 @@ class Triggers:
                         return
                     if message.author == target:
                         return
-                    await target.send(f"You were mentioned in {message.channel.mention}:\n", embed=notify(message))
+                    await target.send(f"You were mentioned in {message.channel.mention}:")
+                    await target.send(embed=notify(message))
 
 
 def setup(bot):
