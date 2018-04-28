@@ -93,6 +93,10 @@ class Triggers:
             if keywords[id] == "":
                 return
             msg = keywords[id].split('|')
+            temp = []
+            for a in msg:
+                temp.append(a.lower())
+            msg = temp
             if (message.guild is not None) and ((any(var in message.content.lower().split(" ") for var in msg)) or (target in message.mentions)):
                 if target is None:
                     pass
