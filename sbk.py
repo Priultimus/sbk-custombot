@@ -210,6 +210,17 @@ class Checks:
             else:
                 return False
         return commands.check(pred)
+    
+    def is_admin():
+        async def pred(ctx):
+            admin = discord.utils.get(ctx.guild.roles, name='Admin')
+            leader = discord.utils.get(ctx.guild.roles, name='LEADER')
+            if admin in ctx.author.roles:
+                return True
+            elif leader in ctx.author.roles:
+                return True
+            else:
+                return False
 
     def is_staff():
         async def pred(ctx):
