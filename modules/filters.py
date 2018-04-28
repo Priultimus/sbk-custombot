@@ -30,6 +30,7 @@ class Triggers:
         await Formatter.success(ctx, f'Successfully unblocked {member.name}')
 
     @commands.command(aliases=['t'])
+    @Checks.is_admin()
     async def trigger(self, ctx, *words):
         words = '|'.join(words)
         try:
@@ -47,6 +48,7 @@ class Triggers:
         await Formatter.success(ctx, "You've added a trigger for yourself!")
 
     @commands.command(aliases=['rt'])
+    @Checks.is_admin()
     async def remove_trigger(self, ctx, *words):
         words = '|'.join(words)
         words = words + '|'
