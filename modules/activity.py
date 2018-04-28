@@ -128,7 +128,7 @@ class Tracker:
         sbk = discord.utils.get(ctx.bot.guilds, id=257889450850254848)
         c = 0
         embed = discord.Embed(color=ctx.author.color)
-        embed.set_author(name='Sinbad Knights Top Ten!',
+        embed.set_author(name='Sinbad Knights Top Nine!',
                          icon_url=ctx.guild.icon_url)
         for user in users:
             c += 1
@@ -141,7 +141,7 @@ class Tracker:
                         if not c >= 4:
                             embed.add_field(name=f"{c}. "+ member.name, value=f"🔥 XP: **{z}**", inline=False)
                         else:
-                            embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**", inline=False)
+                            pass
                     else:
                         embed.add_field(name=f"{c}. "+ member.name, value=f"XP: **{z}**", inline=False)
                 else:

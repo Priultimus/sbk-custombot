@@ -244,7 +244,7 @@ class Formatter:
         await ctx.send(f"<:error:436279057416585217> | {text}")
 
     async def success(ctx, text):
-        await ctx.send(f"✅ | {text}")
+        await ctx.send(f"<a:success:439322665568960512> | {text}")
 
     def bold(text):
         return f"**{text}**"
@@ -333,6 +333,16 @@ class Bot(commands.AutoShardedBot):
                     pass
                 elif b == 'modules.votereact':
                     pass
+                elif b == 'modules.music':
+                    if test:
+                        bot.load_extension(b)
+                    else:
+                        pass
+                elif b == 'modules.activity':
+                    if test:
+                        pass
+                    else:
+                        bot.load_extension(b)
                 else:
                     bot.load_extension(b)
             except Exception as error:
@@ -422,7 +432,7 @@ class Bot(commands.AutoShardedBot):
 
 
 if test:
-    bot = Bot(command_prefix=">>", owner_id=286246724270555136, loop=loop)
+    bot = Bot(command_prefix=">>>", owner_id=286246724270555136, loop=loop)
 else:
     bot = Bot(command_prefix=">", owner_id=286246724270555136, loop=loop)
 

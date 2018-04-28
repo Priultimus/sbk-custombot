@@ -1,30 +1,27 @@
 import discord
-from __main__ import DataManager, Formatter, Checks
+import datetime
+from __main__ import DataManager, Formatter
 from discord.ext import commands
 
 
 def notify(message):
-    embed = discord.Embed(color=message.author.color, timestamp=message.created_at)
-    embed.add_field(name="Message", value=message.content, inline=False)
-    embed.add_field(name="Channel", value=message.channel.mention, inline=False)
-    embed.set_footer(text=f"Message ID: {message.id} | Channel ID: {message.channel.id}")
+    embed = discord.Embed(color=message.author.color, description=str(message.content))
+    embed.set_footer(text="Message ID: {0} | {1}".format(message.id, datetime.datetime.now()))
     embed.set_author(icon_url=message.author.avatar_url, name="{0} ({1})".format(message.author, message.author.id))
     return embed
 
 
-class Triggers:
+class Filters:
 
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    @Checks.is_owner()
     async def block(self, ctx, member: discord.Member):
         DataManager.list_update('data/ignorelist.json', 'ignore', member.id)
         await Formatter.success(ctx, f'Successfully blocked {member.name}')
 
     @commands.command()
-    @Checks.is_owner()
     async def unblock(self, ctx, member: discord.Member):
         DataManager.list_remove('data/ignorelist.json', 'ignore', member.id)
         await Formatter.success(ctx, f'Successfully unblocked {member.name}')
@@ -72,7 +69,7 @@ class Triggers:
             if keywords[id] == "":
                 return
             msg = keywords[id].split('|')
-            if (message.guild is not None) and ((any(var in message.content.lower().split(" ") for var in msg)) or (target in message.mentions)):
+            if (message.guild is not None) and ((any(var in message.content.lower() for var in msg)) or (target in message.mentions)):
                 if target is None:
                     pass
                 else:
@@ -80,7 +77,7 @@ class Triggers:
                         return
                     if message.author == target:
                         return
-                    await target.send(embed=notify(message))
+                    await target.send(f"You were mentioned in {message.channel.mention}:\n", embed=notify(message))
 
     async def on_message_edit(self, before, after):
         message = after
@@ -93,11 +90,7 @@ class Triggers:
             if keywords[id] == "":
                 return
             msg = keywords[id].split('|')
-            temp = []
-            for a in msg:
-                temp.append(a.lower())
-            msg = temp
-            if (message.guild is not None) and ((any(var in message.content.lower().split(" ") for var in msg)) or (target in message.mentions)):
+            if (message.guild is not None) and ((any(var in message.content.lower() for var in msg)) or (target in message.mentions)):
                 if target is None:
                     pass
                 else:
@@ -105,9 +98,9 @@ class Triggers:
                         return
                     if message.author == target:
                         return
-                    await target.send(embed=notify(message))
+                    await target.send(f"You were mentioned in {message.channel.mention}:\n", embed=notify(message))
 
 
 def setup(bot):
-    bot.add_cog(Triggers(bot))
-    print("Loaded Triggers.")
+    bot.add_cog(Filters(bot))
+    print("Loaded Filters.")
