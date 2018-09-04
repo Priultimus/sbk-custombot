@@ -445,4 +445,4 @@ if test:
 
 
 if __name__ == '__main__':
-    bot.run('NDIxNzk5MTA1ODU0MTc3Mjkw.DbOkLQ.RSly_UvQGU8zrhofWN8gC6EBx6U')
+    bot.run('token')
