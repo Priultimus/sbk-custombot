@@ -1,0 +1,8 @@
+*.json
+*.pyc
+__pycache__
+data
+*.exe
+*.dll
+.ropeproject
+*.log
