@@ -184,5 +184,5 @@ class Tracker:
 
 
 def setup(bot):
-    print("Loaded Activity Tracker.")
+    bot.logger.info("Loaded Activity Tracker.")
     bot.add_cog(Tracker())
