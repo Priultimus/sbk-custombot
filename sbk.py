@@ -310,6 +310,7 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._last_exception = None
+        self.logger = logging.getLogger(__name__)
 
     def restart(self):
 
