@@ -37,4 +37,4 @@ class ArtChannel:
 def setup(bot):
     n = ArtChannel(bot)
     bot.add_cog(n)
-    print("Loaded ArtChannel.")
+    bot.logger.info("Loaded ArtChannel.")
